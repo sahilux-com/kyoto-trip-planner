@@ -15,16 +15,28 @@ npm install
 npm run dev
 ```
 
-Open <http://localhost:3000>, type any message (or tap the suggested prompt)
-and press send. A thinking animation plays, then three cards appear in the
-order Stay, Experience, Food.
+Open <http://localhost:3000>, type a message (or tap one of the three starter
+prompts) and press send. A thinking animation plays, then three cards appear in
+the order Stay, Experience, Food.
+
+## Three use cases
+
+The message is matched by its words to one of three sample weekends. Anything
+that matches none of them gets the first one.
+
+| Use case | Paste this | Pack rows |
+|---|---|---|
+| Culture and calm | Plan a weekend in Kyoto for two people. We enjoy cultural experiences, Japanese food and quiet neighbourhoods. | S1, E1, F1 |
+| Food first | Plan a food-lover's weekend in Kyoto for two. We want market stalls, street food and a tasting walk with a local cook. | S3, E2, F3 |
+| Hands-on | Plan a hands-on weekend in Kyoto for two. We'd like to make something in a pottery studio and stay somewhere calm by the river. | S2, E4, F2 |
 
 ## How it is put together
 
 | Piece | Where |
 |---|---|
 | Kyoto weekend content workbook: the content pack spreadsheet transcribed as code, one sheet per card type | `src/data/kyoto-weekend-workbook.ts` |
-| Mock response built from row 0 of each sheet (S1, E1, F1), plus the row-to-card mapping | `src/data/mock-response.ts` |
+| The three use cases, their starter prompts and the message matching | `src/data/trip-plans.ts` |
+| Row-to-card mapping and the mock response builder | `src/data/mock-response.ts` |
 | The single seam between the chat and "the assistant" (delay, mock, injected failure) | `src/lib/trip-planner.ts` |
 | Chat page, thinking state, composer, error bubble, moderator control | `src/components/chat/` |
 | The three cards, each with a different layout | `src/components/cards/` |
@@ -62,6 +74,6 @@ shadcn/ui (button, badge, card, separator) and coss ui, formerly Origin UI
 The cards use stock photos from [Unsplash](https://unsplash.com/license) for
 illustration. They do not show the real stay, experience or restaurant.
 
-- Stay: [Jazmin Wong](https://unsplash.com/photos/a-japanese-style-house-with-a-bicycle-KZTXVSZtUeA)
-- Experience: [Huy Phan](https://unsplash.com/photos/person-whisking-matcha-tea-in-a-ceramic-bowl-Ku-huM0VCak)
-- Food: [Stanley Kustamin](https://unsplash.com/photos/a-bowl-of-ramen-with-pork-egg-and-green-onions-uCAJBSZqPG4)
+Photographers and source links are listed per photo in
+`src/data/stock-photos.ts`: Jazmin Wong, Yosuke Ota, rawkkim, Huy Phan,
+Kate Wells, Sebastian Monroy, Stanley Kustamin, leongsan and Pratiksha Singh.

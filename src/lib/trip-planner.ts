@@ -1,4 +1,4 @@
-import { mockTripPlanResponse } from "@/data/mock-response";
+import { pickTripPlan } from "@/data/trip-plans";
 import type { TripPlanResponse } from "@/lib/types";
 
 /** How long the thinking animation shows before the cards arrive. */
@@ -15,24 +15,33 @@ export class TripPlanError extends Error {
   }
 }
 
+export type TripPlanReply = {
+  /** Which of the three use cases the message matched. */
+  planId: string;
+  /** What the assistant says above the cards. */
+  intro: string;
+  cards: TripPlanResponse;
+};
+
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /**
  * The single seam between the chat and "the assistant".
  *
- * Any message resolves to the same three cards after a short delay. With
- * `fail: true` (set by the moderator's one-shot "Fail next reply" control) the
- * request rejects with a TripPlanError instead.
+ * The message is matched to one of three sample Kyoto weekends and resolves to
+ * that plan's three cards after a short delay. With `fail: true` (set by the
+ * moderator's one-shot "Fail next reply" control) the request rejects with a
+ * TripPlanError instead.
  */
 export async function requestTripPlan(
   message: string,
   { fail = false }: { fail?: boolean } = {},
-): Promise<TripPlanResponse> {
-  void message; // every message gets the same plan for now
+): Promise<TripPlanReply> {
   if (fail) {
     await sleep(FAILURE_DELAY_MS);
     throw new TripPlanError();
   }
   await sleep(THINKING_DELAY_MS);
-  return mockTripPlanResponse;
+  const plan = pickTripPlan(message);
+  return { planId: plan.id, intro: plan.intro, cards: plan.cards };
 }

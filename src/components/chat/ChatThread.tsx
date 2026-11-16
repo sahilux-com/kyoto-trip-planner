@@ -7,8 +7,7 @@ import { MessageBubble } from "@/components/chat/MessageBubble";
 import { ThinkingBubble } from "@/components/chat/ThinkingBubble";
 import {
   ERROR_MESSAGE,
-  PLAN_INTRO,
-  SUGGESTED_PROMPT,
+  SUGGESTED_PROMPTS,
   WELCOME_MESSAGE,
   type ChatMessage,
 } from "@/components/chat/messages";
@@ -49,8 +48,8 @@ export function ChatThread() {
     }
     setThinking(true);
     try {
-      const cards = await requestTripPlan(prompt, { fail });
-      setMessages((m) => [...m, { id, role: "assistant", text: PLAN_INTRO, cards }]);
+      const { intro, cards } = await requestTripPlan(prompt, { fail });
+      setMessages((m) => [...m, { id, role: "assistant", text: intro, cards }]);
       if (isRetry) track("retry_success");
     } catch {
       setMessages((m) => [
@@ -115,18 +114,30 @@ export function ChatThread() {
           {showSuggestion && (
             <div className="animate-rise pl-10 [animation-delay:120ms]">
               <p className="mb-2 text-[11px] font-semibold tracking-[0.14em] text-muted-foreground uppercase">
-                Try this
+                Try one of these
               </p>
-              <button
-                type="button"
-                onClick={() => send(SUGGESTED_PROMPT)}
-                className="group flex w-full max-w-md items-center gap-4 rounded-2xl border border-border bg-card/80 px-4 py-3.5 text-left shadow-[0_8px_24px_-18px_rgb(28_25_23/0.4)] transition hover:-translate-y-0.5 hover:border-ink/30 hover:bg-card hover:shadow-[0_14px_30px_-18px_rgb(28_25_23/0.5)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
-              >
-                <span className="text-[15px] leading-snug text-ink">{SUGGESTED_PROMPT}</span>
-                <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-muted text-ink transition group-hover:bg-coral group-hover:text-white">
-                  <ArrowRight className="size-4" aria-hidden="true" />
-                </span>
-              </button>
+              <ul className="max-w-md space-y-2">
+                {SUGGESTED_PROMPTS.map((suggestion) => (
+                  <li key={suggestion.id}>
+                    <button
+                      type="button"
+                      onClick={() => send(suggestion.prompt)}
+                      data-suggestion={suggestion.id}
+                      className="group flex w-full items-center gap-4 rounded-2xl border border-border bg-card/80 px-4 py-3 text-left shadow-[0_8px_24px_-18px_rgb(28_25_23/0.4)] transition hover:-translate-y-0.5 hover:border-ink/30 hover:bg-card hover:shadow-[0_14px_30px_-18px_rgb(28_25_23/0.5)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+                    >
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-sm font-medium text-ink">{suggestion.label}</span>
+                        <span className="mt-0.5 block text-[13px] leading-snug text-muted-foreground">
+                          {suggestion.prompt}
+                        </span>
+                      </span>
+                      <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-muted text-ink transition group-hover:bg-coral group-hover:text-white">
+                        <ArrowRight className="size-4" aria-hidden="true" />
+                      </span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
             </div>
           )}
           <div ref={endRef} />

@@ -6,7 +6,7 @@ One-page card and error-state spec for the Airbnb conversational trip-planner pr
 
 **Fixed sample trip.** Kyoto, Japan · 2 guests · Fri 11 Apr – Sun 13 Apr 2025 · 2 nights. Every card and every mock value uses this trip.
 
-**Content source.** Example values come from the Kyoto Weekend Prototype Content Pack: rows S1 (Stays), E1 (Experiences) and F1 (Food). Together they cost $516 for two against the pack's $600 reference budget. The pack has no photo URLs because rights for the real photos are not cleared, so each image slot shows a stock photo from Unsplash for illustration. It does not show the place on the card. Where the spec says "image placeholder", read it as that photo slot; a grey stand-in is drawn if a photo is missing.
+**Content source.** Example values come from the Kyoto Weekend Prototype Content Pack: rows S1 (Stays), E1 (Experiences) and F1 (Food). Together they cost $516 for two against the pack's $600 reference budget. This is the first of three use cases; see "Three use cases" below. The pack has no photo URLs because rights for the real photos are not cleared, so each image slot shows a stock photo from Unsplash for illustration. It does not show the place on the card. Where the spec says "image placeholder", read it as that photo slot; a grey stand-in is drawn if a photo is missing.
 
 **Rules for all three cards.** Each card has one image placeholder, one line of biggest text and one accent colour. No two cards share the same image placement, biggest-text type or accent colour (see the check table after the Food card).
 
@@ -117,6 +117,18 @@ The content pack schedules every experience on Sat 12 Apr only, so the day plan 
 | Card height | Tall | Medium | Short |
 
 No column repeats a value from another column, so the three cards cannot be mistaken for one another at a glance.
+
+## Three use cases
+
+The chat answers three different requests, each with its own stay, experience and food cards built from content pack rows. A message is matched by the words it uses; anything that matches none of them gets the first plan. Every plan is inside the $600 reference budget, and none uses the sold-out E3.
+
+| Use case | Paste this | Rows | Cost for two |
+|---|---|---|---|
+| Culture and calm | Plan a weekend in Kyoto for two people. We enjoy cultural experiences, Japanese food and quiet neighbourhoods. | S1, E1, F1 | $516 |
+| Food first | Plan a food-lover's weekend in Kyoto for two. We want market stalls, street food and a tasting walk with a local cook. | S3, E2, F3 | $449 |
+| Hands-on | Plan a hands-on weekend in Kyoto for two. We'd like to make something in a pottery studio and stay somewhere calm by the river. | S2, E4, F2 | $520 |
+
+The card sketches and field tables above show the first use case. The other two use the same three card layouts with their own rows.
 
 ## Mock response shape
 
