@@ -6,6 +6,8 @@ One-page card and error-state spec for the Airbnb conversational trip-planner pr
 
 **Fixed sample trip.** Kyoto, Japan · 2 guests · Fri 11 Apr – Sun 13 Apr 2025 · 2 nights. Every card and every mock value uses this trip.
 
+**Content source.** Example values come from the Kyoto Weekend Prototype Content Pack: rows S1 (Stays), E1 (Experiences) and F1 (Food). Together they cost $516 for two against the pack's $600 reference budget. The pack has no photo URLs because rights for the real photos are not cleared, so each image slot shows a stock photo from Unsplash for illustration. It does not show the place on the card. Where the spec says "image placeholder", read it as that photo slot; a grey stand-in is drawn if a photo is missing.
+
 **Rules for all three cards.** Each card has one image placeholder, one line of biggest text and one accent colour. No two cards share the same image placement, biggest-text type or accent colour (see the check table after the Food card).
 
 ## Stay card
@@ -19,9 +21,10 @@ One-page card and error-state spec for the Airbnb conversational trip-planner pr
 |                                               |
 +-----------------------------------------------+
 |  Fri 11 Apr – Sun 13 Apr 2025 · 2 nights      |  <- biggest text
-|  Machiya townhouse near Gion · Kyoto, Japan   |
-|  $185 USD / night                             |
-|  Quiet wooden house, 5 min walk to Yasaka.    |
+|  Restored machiya townhouse near Gion ·       |
+|  Kyoto, Japan                                 |
+|  $168 USD / night                             |
+|  Private garden and cedar soaking tub.        |
 +-----------------------------------------------+
 ```
 
@@ -30,11 +33,11 @@ One-page card and error-state spec for the Airbnb conversational trip-planner pr
 | Field | Mock key | Example value |
 |---|---|---|
 | Destination | `destination` | Kyoto, Japan |
-| Listing title | `listingTitle` | Machiya townhouse near Gion |
+| Listing title | `listingTitle` | Restored machiya townhouse near Gion |
 | Check-in | `checkIn` | 2025-04-11 |
 | Check-out | `checkOut` | 2025-04-13 |
-| Nightly price (USD) | `nightlyPriceUsd` | 185 |
-| Short description | `description` | Quiet wooden house, 5 min walk to Yasaka Shrine. |
+| Nightly price (USD) | `nightlyPriceUsd` | 168 |
+| Short description | `description` | Private garden and cedar soaking tub. (The pack's Highlight column.) |
 
 ### What makes this card look different
 
@@ -49,11 +52,11 @@ One-page card and error-state spec for the Airbnb conversational trip-planner pr
 
 ```
 +--------+--------------------------------------+
-|        |  Arashiyama Bamboo & Tea Walk        |  <- biggest text
-| image  |  3 hours                             |
-| (tall  |  [SAT] Bamboo grove, Tenryu-ji, tea  |  <- purple day labels
-| strip) |  [SUN] Fushimi Inari at sunrise      |
-|        |                                      |
+|        |  Tea ceremony in a 100-year-old      |  <- biggest text
+| image  |  machiya                             |
+| (tall  |  2 hours                             |
+| strip) |  [SAT] Starts 10:30. Meeting point:  |  <- purple day label
+|        |        Outside Gion-Shijo Station    |
 +--------+--------------------------------------+
 ```
 
@@ -61,16 +64,17 @@ One-page card and error-state spec for the Airbnb conversational trip-planner pr
 
 | Field | Mock key | Example value |
 |---|---|---|
-| Activity name | `activityName` | Arashiyama Bamboo & Tea Walk |
-| Duration | `duration` | 3 hours |
-| Day plan, Sat 12 Apr | `dayPlan[0].day`, `dayPlan[0].plan` | Sat 12 Apr · Bamboo grove, Tenryu-ji garden, matcha tasting |
-| Day plan, Sun 13 Apr | `dayPlan[1].day`, `dayPlan[1].plan` | Sun 13 Apr · Fushimi Inari gates at sunrise, then checkout |
+| Activity name | `activityName` | Tea ceremony in a 100-year-old machiya |
+| Duration | `duration` | 2 hours |
+| Day plan, Sat 12 Apr | `dayPlan[0].day`, `dayPlan[0].plan` | Sat 12 Apr · Starts 10:30. Meeting point: Outside Gion-Shijo Station, exit 6. |
+
+The content pack schedules every experience on Sat 12 Apr only, so the day plan has one line. `dayPlan` stays a list so a Sunday line can be added if content for it arrives.
 
 ### What makes this card look different
 
 - Image placeholder: a tall grey strip down the left edge.
 - Biggest text: the activity name.
-- Accent colour: purple, on the SAT / SUN day labels only.
+- Accent colour: purple, on the day label only.
 - Shape: wide, two-column, with a day-by-day list. Reads like a schedule.
 
 ## Food card
@@ -79,9 +83,10 @@ One-page card and error-state spec for the Airbnb conversational trip-planner pr
 
 ```
 +-----------------------------------------------+
-|  Nishiki Market Kaiseki Bar          ( img )  |  <- biggest text; round image, right
-|  Dinner · $$$                                 |  <- amber label
-|  Seasonal small plates at a 10-seat counter.  |
+|  Menya Inoichi                       ( img )  |  <- biggest text; round image, right
+|  Dinner · $                                   |  <- amber label
+|  Ramen in Gion, 8 min walk from your stay.    |
+|  No reservations - arrive before 18:00.       |
 +-----------------------------------------------+
 ```
 
@@ -89,17 +94,17 @@ One-page card and error-state spec for the Airbnb conversational trip-planner pr
 
 | Field | Mock key | Example value |
 |---|---|---|
-| Restaurant name | `restaurantName` | Nishiki Market Kaiseki Bar |
+| Restaurant name | `restaurantName` | Menya Inoichi |
 | Meal type | `mealType` | Dinner |
-| Price range | `priceRange` | $$$ |
-| Short description | `description` | Seasonal small plates at a 10-seat counter. |
+| Price range | `priceRange` | $ |
+| Short description | `description` | Ramen in Gion, 8 min walk from your stay. No reservations - arrive before 18:00. (Built from the pack's Cuisine, Neighbourhood, Walk from Stay and Booking Note columns.) |
 
 ### What makes this card look different
 
 - Image placeholder: a small round thumbnail in the top-right corner.
 - Biggest text: the restaurant name.
 - Accent colour: amber, on the meal type and price label.
-- Shape: short, three lines, no border. Reads like a quick tip.
+- Shape: short, a few lines, no accent border. Reads like a quick tip.
 
 ## Differentiation check
 
@@ -119,20 +124,51 @@ A mock response is sample data that stands in for the assistant's real answer, w
 
 ```json
 [
-  { "cardType": "stay", "details": {
+  { "cardType": "stay", "sample": true, "sourceRow": "",
+    "unresolved": [ { "field": "", "reason": "" } ],
+    "details": {
       "destination": "", "listingTitle": "",
       "checkIn": "", "checkOut": "",
-      "nightlyPriceUsd": null, "description": "" } },
-  { "cardType": "experience", "details": {
+      "nightlyPriceUsd": null, "description": "",
+      "guests": null, "totalUsd": null,
+      "imageUrl": null, "imageAlt": "", "imagePosition": "" } },
+  { "cardType": "experience", "sample": true, "sourceRow": "",
+    "unresolved": [ { "field": "", "reason": "" } ],
+    "details": {
       "activityName": "", "duration": "",
       "dayPlan": [
-        { "day": "", "plan": "" },
-        { "day": "", "plan": "" } ] } },
-  { "cardType": "food", "details": {
+        { "day": "", "plan": "" } ],
+      "date": "", "startTime": "", "partySize": null,
+      "pricePerGuestUsd": null, "availability": "",
+      "imageUrl": null, "imageAlt": "", "imagePosition": "" } },
+  { "cardType": "food", "sample": true, "sourceRow": "",
+    "unresolved": [ { "field": "", "reason": "" } ],
+    "details": {
       "restaurantName": "", "mealType": "",
-      "priceRange": "", "description": "" } }
+      "priceRange": "", "description": "",
+      "cuisine": "", "area": "", "walkFromStayMin": null,
+      "openingHours": null,
+      "imageUrl": null, "imageAlt": "", "imagePosition": "" } }
 ]
 ```
+
+### Sample content and unresolved fields
+
+Every card carries `sample: true`: the content is sample data, and nothing is booked, held or checked against live inventory. `sourceRow` names the content pack row (S1, E1, F1). `unresolved` lists the fields that are missing or unverified, with the reason.
+
+| Card | Unresolved | Why |
+|---|---|---|
+| Stay | `imageUrl` | Stock photo for illustration; not this listing. |
+| Stay | `checkIn`, `checkOut` | April 2025 sample dates. |
+| Stay | `totalUsd` | Pack lists $366 for 2 nights at $168 a night and does not explain the difference. |
+| Experience | `imageUrl` | Stock photo for illustration; not this experience. |
+| Experience | `date`, `startTime`, `availability` | Sample values, not current availability. |
+| Experience | `pricePerGuestUsd` | Sample price, not verified. |
+| Food | `imageUrl` | Stock photo for illustration; not this restaurant. |
+| Food | `openingHours` | Pack has a booking note only. |
+| Food | `walkFromStayMin` | Pack does not say which stay the walk is measured from. |
+
+Apart from the photo fields, the cards do not yet display the new fields; they are in the contract so the layout work can use them.
 
 ## Error bubble
 
@@ -143,25 +179,29 @@ Assistant
 +-----------------------------------------------+
 |  Sorry, I couldn't put your Kyoto weekend     |
 |  together just now. Let's give it another go. |
-|                                [ Try again ]  |
+|               [ Browse stays ]  [ Try again ] |
 +-----------------------------------------------+
 ```
 
 | Part | Value |
 |---|---|
 | Message | Sorry, I couldn't put your Kyoto weekend together just now. Let's give it another go. |
-| Button label | Try again |
+| Primary button | Try again |
+| Secondary button | Browse stays. Opens the existing Kyoto stay search in a new tab, so the chat is kept. |
 | Button position | Inside the assistant's chat bubble, bottom right. |
-| What the button does | Re-sends the same trip request. The traveller does not retype anything. On success the three cards appear in the order Stay, Experience, Food. |
-| What is kept | The traveller's original message stays visible above the error bubble. |
-| Forced-failure trigger | The page address ends with `?fail=once`. The first request then gets a broken mock response. Every request after that works normally. |
+| What Try again does | Re-sends the same trip request. The traveller does not retype anything. The three cards appear in the order Stay, Experience, Food. |
+| What is kept | The whole thread: the traveller's original message, the error bubble (without its buttons once used) and any earlier cards. |
+| Accessibility | The error text is announced through the thread's live region, and keyboard focus moves to Try again. |
+| Forced-failure trigger | A moderator-only **Fail next reply** control. It is on the page only when the address includes `?moderator`. It is one-shot: the next request waits 800 ms, fails, and the control switches itself off. Every request after that works normally, so Try again always succeeds. |
+| Events | `failure_injected` when the armed request is sent, `retry_success` when a retry returns the cards. Both are logged to the browser console and kept on `window.__tripPlannerEvents`; nothing is sent anywhere. |
 
 ### Steps to fire the trigger (usability test script)
 
-1. Open the live link with `?fail=once` added to the end of the address.
-2. Type "Plan a weekend in Kyoto for two" and press Send.
-3. The thinking animation plays. Then the error bubble appears.
-4. Tap **Try again**. The Stay, Experience and Food cards appear in that order.
+1. Open the live link with `?moderator` added to the end of the address.
+2. Tap **Fail next reply** in the top-right corner. It changes to "Next reply will fail".
+3. Hand over the device. The traveller types "Plan a weekend in Kyoto for two" and presses Send.
+4. The thinking animation plays. Then the error bubble appears and the control resets.
+5. The traveller taps **Try again**. The Stay, Experience and Food cards appear in that order.
 
 ## Out of scope for this prototype
 

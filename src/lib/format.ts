@@ -7,6 +7,9 @@ const dayFmt = new Intl.DateTimeFormat("en-GB", {
 
 const toDate = (iso: string) => new Date(`${iso}T00:00:00Z`);
 
+/** "Sat 12 Apr" */
+export const formatDay = (iso: string) => dayFmt.format(toDate(iso)).replace(",", "");
+
 /** "Fri 11 Apr – Sun 13 Apr 2025 · 2 nights" */
 export function formatStayDates(checkIn: string, checkOut: string): string {
   const start = toDate(checkIn);

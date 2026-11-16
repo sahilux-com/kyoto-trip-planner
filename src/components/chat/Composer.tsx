@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { ArrowUp } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 type Props = { disabled: boolean; onSend: (text: string) => void };
 
@@ -18,26 +20,24 @@ export function Composer({ disabled, onSend }: Props) {
   return (
     <form
       onSubmit={submit}
-      className="flex items-center gap-2 rounded-full border border-stone-300 bg-white p-1.5 pl-5 shadow-lg shadow-stone-900/5 focus-within:border-stone-500"
+      className="flex items-center gap-2 rounded-full border border-border bg-card p-1.5 pl-5 shadow-[0_10px_30px_-12px_rgb(28_25_23/0.25)] transition focus-within:border-ink/40 focus-within:shadow-[0_12px_34px_-12px_rgb(28_25_23/0.35)]"
     >
       <input
         value={text}
         onChange={(e) => setText(e.target.value)}
         placeholder="Describe your trip…"
         aria-label="Message"
-        className="min-w-0 flex-1 bg-transparent text-[15px] text-stone-900 outline-none placeholder:text-stone-400"
+        className="min-w-0 flex-1 bg-transparent text-[15px] text-ink outline-none placeholder:text-muted-foreground/70"
       />
-      <button
+      <Button
         type="submit"
+        size="icon-lg"
         disabled={disabled || !text.trim()}
-        className="flex h-10 w-10 items-center justify-center rounded-full bg-coral text-white transition hover:bg-coral-dark disabled:cursor-not-allowed disabled:bg-stone-300"
         aria-label="Send"
+        className="size-10 rounded-full bg-coral text-white hover:bg-coral-dark disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100"
       >
-        <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-          <path d="M12 19V5" />
-          <path d="m5 12 7-7 7 7" />
-        </svg>
-      </button>
+        <ArrowUp className="size-5" strokeWidth={2.4} />
+      </Button>
     </form>
   );
 }

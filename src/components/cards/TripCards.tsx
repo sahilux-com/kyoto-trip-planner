@@ -17,12 +17,12 @@ function renderCard(card: TripCard) {
 /** Draws the cards in the order the response gives them, staggering their entrance. */
 export function TripCards({ cards }: { cards: TripCard[] }) {
   return (
-    <ol className="space-y-3" aria-label="Trip recommendations">
+    <ol className="space-y-3.5" aria-label="Trip recommendations">
       {cards.map((card, i) => (
         <li
           key={card.cardType}
           className="animate-card-in opacity-0"
-          style={{ animationDelay: `${i * 140}ms` }}
+          style={{ animationDelay: `${i * 160}ms` }}
         >
           {renderCard(card)}
         </li>
