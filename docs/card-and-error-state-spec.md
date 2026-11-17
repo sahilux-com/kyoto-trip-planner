@@ -171,22 +171,24 @@ Goal from the brief: the traveller recovers from a technical failure without los
 ```
 Assistant
 +-----------------------------------------------+
-|  Sorry, I couldn't put your Kyoto weekend     |
-|  together just now. Let's give it another go. |
-|               [ Browse stays ]  [ Try again ] |
+|  (!) Something interrupted your plan.         |
+|  I couldn't finish your Kyoto weekend. Your   |
+|  choices are still here.                      |
+|      [ Browse stays instead ]  [ Try again ]  |
 +-----------------------------------------------+
 ```
 
 | Part | Value |
 |---|---|
-| Message | Sorry, I couldn't put your Kyoto weekend together just now. Let's give it another go. |
+| Message | **Something interrupted your plan.** I couldn't finish your Kyoto weekend. Your choices are still here. |
+| Copy check (error message guidelines) | Says what happened in plain words, with no error code and no blame on the guest. Says nothing is lost (the thread and any saved picks stay). Ends on a next step, never a dead end. Wording follows the error spec; the button keeps the brief's "Try again" rather than the spec's "Retry". |
 | Primary button | Try again |
-| Secondary button | Browse stays. Opens the existing Kyoto stay search in a new tab, so the chat is kept. |
+| Secondary button | Browse stays instead. Opens the existing Kyoto stay search in a new tab, so the chat is kept. |
 | Button position | Inside the assistant's chat bubble, bottom right. |
 | What Try again does | Re-sends the same trip request. The traveller does not retype anything. The three cards appear in the same order the request would have produced. |
 | What is kept | The whole thread: the traveller's original message, the error bubble (without its buttons once used) and any earlier cards. |
 | Accessibility | The error text is announced through the thread's live region, and keyboard focus moves to Try again. |
-| Forced-failure trigger | A moderator-only **Fail next reply** control. It is on the page only when the address includes `?moderator`. It is one-shot: the next request waits 800 ms, fails, and the control switches itself off. Every request after that works normally, so Try again always succeeds. |
+| Forced-failure trigger | A moderator-only **Fail next reply** control. It is on the page only when the address includes `?moderator`. It is one-shot: the next request waits 800 ms and gets back a deliberately broken mock response (`src/data/broken-response.ts`: the food card is missing, the stay has no price, the experience is sold out). Every reply, real or broken, goes through `checkReply` in `src/lib/trip-planner.ts`, which only lets through three complete cards; the broken one fails, the guest sees the error bubble, and the control switches itself off. Every request after that works normally, so Try again always succeeds. |
 | Events | `failure_injected` when the armed request is sent, `retry_success` when a retry returns the cards (and `card_opened` when View details is tapped on a card). Both are logged to the browser console and kept on `window.__tripPlannerEvents`; nothing is sent anywhere. |
 
 ### Steps to fire the trigger (usability test script)

@@ -2,7 +2,7 @@ import { CloudOff } from "lucide-react";
 import { AssistantAvatar } from "@/components/chat/Avatar";
 import { ErrorActions } from "@/components/chat/ErrorActions";
 import { TripCards } from "@/components/cards/TripCards";
-import type { ChatMessage } from "@/components/chat/messages";
+import { ERROR_TITLE, type ChatMessage } from "@/components/chat/messages";
 
 type Props = { message: ChatMessage; onRetry?: (prompt: string) => void };
 
@@ -31,9 +31,10 @@ export function MessageBubble({ message, onRetry }: Props) {
             >
               <CloudOff className="size-4" />
             </span>
-            <p id={textId} className="text-[15px] leading-relaxed text-ink">
-              {message.text}
-            </p>
+            <div id={textId} className="text-[15px] leading-relaxed">
+              <p className="font-semibold text-coral-dark">{ERROR_TITLE}</p>
+              <p className="text-ink">{message.text}</p>
+            </div>
           </div>
           {!error.resolved && <ErrorActions describedBy={textId} onRetry={() => onRetry?.(error.prompt)} />}
         </div>

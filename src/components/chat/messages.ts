@@ -21,7 +21,13 @@ export const WELCOME_MESSAGE: ChatMessage = {
   text: "Hi! Tell me about the trip you have in mind and I'll put together a place to stay, something to do and somewhere to eat.",
 };
 
-export const ERROR_MESSAGE = "Sorry, I couldn't put your Kyoto weekend together just now. Let's give it another go.";
+/**
+ * Error bubble copy, from the error spec: say what happened in plain words, say
+ * nothing is lost, then offer the next step (Try again, or Browse stays instead).
+ * No error codes, no blame on the guest, no "something went wrong" dead end.
+ */
+export const ERROR_TITLE = "Something interrupted your plan.";
+export const ERROR_MESSAGE = "I couldn't finish your Kyoto weekend. Your choices are still here.";
 
 /** Fallback offered next to Try again: the existing search, in a new tab so the chat is kept. */
 export const BROWSE_STAYS_URL = "https://www.airbnb.com/s/Kyoto--Japan/homes";

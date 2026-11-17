@@ -24,7 +24,7 @@ export function ErrorActions({ describedBy, onRetry }: Props) {
         rel="noopener noreferrer"
         className={cn(buttonVariants({ variant: "outline", size: "lg" }), "rounded-full px-4")}
       >
-        Browse stays
+        Browse stays instead
         <ArrowUpRight data-icon="inline-end" />
       </a>
       <Button

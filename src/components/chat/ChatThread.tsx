@@ -57,7 +57,9 @@ export function ChatThread() {
       const { intro, cards } = await requestTripPlan(prompt, { fail });
       setMessages((m) => [...m, { id, role: "assistant", text: intro, cards }]);
       if (isRetry) track("retry_success");
-    } catch {
+    } catch (err) {
+      // For the moderator only: what was wrong with the reply. The guest sees the bubble.
+      console.warn("[trip-planner] reply rejected:", err instanceof Error ? err.message : err);
       setMessages((m) => [
         ...m,
         { id, role: "assistant", text: ERROR_MESSAGE, error: { prompt, resolved: false } },
