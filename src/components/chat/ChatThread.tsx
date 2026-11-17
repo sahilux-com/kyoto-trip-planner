@@ -96,7 +96,9 @@ export function ChatThread() {
                 aria-pressed={failNext}
                 onClick={() => setFailNext((armed) => !armed)}
                 data-moderator-control
-                className="fixed top-3 right-3 z-30 rounded-full px-3 shadow-sm"
+                // On a phone the centred title and badge reach the right edge, so the
+                // control sits just under the header there instead of beside it.
+                className="fixed top-[4.5rem] right-3 z-30 rounded-full px-3 shadow-sm md:top-3"
               />
             }
           >

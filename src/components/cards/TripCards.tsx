@@ -17,12 +17,14 @@ function renderCard(card: TripCard) {
 /**
  * Draws the cards side by side, in the order the response gives them.
  * From tablet width up all three share the row. On a phone the row scrolls
- * sideways and snaps card by card, with the next card peeking in.
+ * sideways and snaps card by card, with the next card peeking in. Only one card
+ * is in view there, so each keeps its own height (no empty gap on the shorter
+ * food card); side by side they stretch so the buttons line up.
  */
 export function TripCards({ cards }: { cards: TripCard[] }) {
   return (
     <ol
-      className="-mx-4 flex snap-x snap-mandatory scroll-px-4 items-stretch gap-2.5 overflow-x-auto px-4 pt-1 pb-5 [scrollbar-width:none] md:mx-0 md:overflow-visible md:px-0 md:pb-1 [&::-webkit-scrollbar]:hidden"
+      className="-mx-4 flex snap-x snap-mandatory scroll-px-4 items-start gap-2.5 overflow-x-auto px-4 pt-1 pb-5 [scrollbar-width:none] md:mx-0 md:items-stretch md:overflow-visible md:px-0 md:pb-1 [&::-webkit-scrollbar]:hidden"
       aria-label="Trip recommendations"
     >
       {cards.map((card, i) => (
