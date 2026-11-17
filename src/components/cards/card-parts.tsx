@@ -20,9 +20,10 @@ import { cn } from "@/lib/utils";
  */
 
 const accents = {
-  coral: { badge: "bg-coral text-white", rule: "bg-coral" },
-  violet: { badge: "bg-violet-600 text-white", rule: "bg-violet-600" },
-  amber: { badge: "bg-amber-400 text-ink", rule: "bg-amber-400" },
+  // `card` is a very light pastel wash of the accent, behind the whole card.
+  coral: { badge: "bg-coral text-white", rule: "bg-coral", card: "bg-[#fff7f8]" },
+  violet: { badge: "bg-violet-600 text-white", rule: "bg-violet-600", card: "bg-[#faf8ff]" },
+  amber: { badge: "bg-amber-400 text-ink", rule: "bg-amber-400", card: "bg-[#fffaf0]" },
 } as const;
 
 export type CardAccent = keyof typeof accents;
@@ -196,12 +197,13 @@ export function TripCardShell({ view }: { view: TripCardView }) {
       data-layout={view.layout}
       data-in-plan={inPlan}
       className={cn(
-        "relative flex h-full flex-col overflow-hidden rounded-[22px] border bg-card p-2 pt-3 shadow-[0_14px_30px_-22px_rgb(28_25_23/0.45)] transition-colors",
+        "relative flex h-full flex-col overflow-hidden rounded-[22px] border p-2 pt-3 shadow-[0_14px_30px_-22px_rgb(28_25_23/0.45)] transition-colors",
+        accents[view.badge.accent].card,
         inPlan ? "border-ink/40" : "border-border/70",
       )}
     >
       {/* Accent rule across the top: the card's colour, visible even before the photo loads. */}
-      <span aria-hidden="true" className={cn("absolute inset-x-0 top-0 h-1", accents[view.badge.accent].rule)} />
+      <span aria-hidden="true" className={cn("absolute inset-x-0 top-0 h-[3px]", accents[view.badge.accent].rule)} />
 
       <CardTop view={view} />
 

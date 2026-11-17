@@ -16,7 +16,7 @@ One-page card and error-state spec for the Airbnb conversational trip-planner pr
 | Biggest text | Nightly price, "$168 per night" | Start time, "Sat 10:30 start" | Restaurant name, "Menya Inoichi" |
 | Accent colour | Coral | Violet | Amber |
 
-The accent colour shows as a filled badge with the card type in words ("Stay", "Experience", "Food") and a rule across the top of the card, so colour is never the only cue. An earlier version merged the three into one identical layout to match a reference listing card; that lost the first two differences and was reverted.
+The accent colour shows as a filled badge with the card type in words ("Stay", "Experience", "Food") a 3px rule across the top of the card and a very light pastel wash behind the card, so colour is never the only cue. An earlier version merged the three into one identical layout to match a reference listing card; that lost the first two differences and was reverted.
 
 ```
  STAY                        EXPERIENCE                  FOOD
