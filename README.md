@@ -25,8 +25,8 @@ prompts) and press send.
 
 1. **The chat locks.** The message box and send button are disabled, so a
    second request can't be typed or sent while one is in flight.
-2. **A thinking state plays** for 1.6 seconds: animated dots, a status line and
-   outlines of the three cards that are coming.
+2. **A thinking state plays** for 1.6 seconds: an animated orb, a status line
+   and outlines of the three cards that are coming.
 3. **The mock reply arrives:** three cards in the order Stay, Experience, Food,
    built from three rows of the content workbook (one stay row, one experience
    row, one food row), and the chat unlocks.
@@ -82,7 +82,8 @@ same prompt and returns the three cards; the thread is never cleared.
 
 Lexend Deca throughout, on a warm paper background. UI primitives come from
 shadcn/ui (button, badge, card, separator) and coss ui, formerly Origin UI
-(skeleton, tooltip), in `src/components/ui/`.
+(skeleton, tooltip), in `src/components/ui/`. The thinking orb is from
+[`@yogesharc/thinking-orbs`](https://thinkingorbs.com).
 
 ## Photo credits
 
