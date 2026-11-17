@@ -48,7 +48,9 @@ Stack: Next.js (App Router), React, TypeScript, Tailwind CSS v4. No backend.
 
 Stay, Experience and Food share one layout (`src/components/cards/card-parts.tsx`):
 an inset photo with a badge, a price headline, a name line, two stats, a footer
-row and a **View details** button that opens extra details inside the card.
+row and two actions. The first (View stay, See times, View restaurant) opens
+extra details inside the card; the second (Save, Add to plan) puts the card on
+a **Your plan** shortlist shown above the message box. Nothing is booked.
 Each card type maps its own content pack fields onto those slots. The three cards sit
 side by side in one row; on a phone the row scrolls sideways. The badge and
 its accent colour (coral, violet, amber) tell the cards apart.
@@ -61,7 +63,7 @@ and fails, the assistant shows an apology bubble with **Try again** and
 **Browse stays**, and the control switches itself off. Try again re-sends the
 same prompt and returns the three cards; the thread is never cleared.
 
-`failure_injected`, `retry_success` and `card_opened` are logged to the console and kept on
+`failure_injected`, `retry_success`, `card_opened` and `plan_added` are logged to the console and kept on
 `window.__tripPlannerEvents`. Nothing is sent anywhere.
 
 ## Design and components

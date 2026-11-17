@@ -23,7 +23,7 @@ One-page card and error-state spec for the Airbnb conversational trip-planner pr
 |   2 Nights          |   4.92 Rating           |  <- two stats
 |  -------------------------------------------  |
 |  Hosted by • Kenji             11 – 13 Apr    |  <- footer: who / when
-|  [              View details               ]  |  <- opens extra details inside the card
+|  [   View stay   ]  [   ♡ Save   ]             |  <- two actions
 +-----------------------------------------------+
 ```
 
@@ -36,9 +36,18 @@ One-page card and error-state spec for the Airbnb conversational trip-planner pr
 | Stat 2 | Guest rating | Rating | Price level |
 | Footer line 1 | Hosted by, host first name | Hosted by, host first name (or "to be confirmed") | Good for, meal |
 | Footer line 2 | Dates | Day and start time | Neighbourhood |
-| View details | Property type, highlight, total, reviews | Meeting point, total for two, availability | Booking note, cuisine, area |
+| Action 1, opens details in the card | View stay | See times | View restaurant |
+| Action 2, adds to the shortlist | Save, then Saved | Add to plan, then In plan | Add to plan, then In plan |
+| Details shown | Property type, highlight, guests, reviews, total | Time, availability, meeting point, total for two | Booking note, opening hours (not in the sample data), cuisine, area, walk |
 
-**View details** opens a short list inside the card and records a `card_opened` event in the page. It does not book or hold anything, and totals and availability are labelled as sample data.
+**Card actions.** Each card has two buttons.
+
+- The first (**View stay**, **See times**, **View restaurant**) opens a short list of details inside the card and records a `card_opened` event. There is no detail page behind it.
+- The second (**Save** on a stay, **Add to plan** on an experience or a restaurant) puts the card on the traveller's shortlist and records a `plan_added` event. The button then reads **Saved** or **In plan**, and tapping it again removes the card.
+
+The shortlist appears as a **Your plan** bar above the message box, with one chip per item; tapping a chip removes it. It is kept when new messages are sent, when a reply fails and when Try again is used.
+
+Neither action books, holds or reserves anything. Times, availability and totals in the details are labelled as sample data, the restaurant details say opening hours are not in the sample data, and adding a restaurant does not imply a table is available.
 
 **Row layout.** The three cards sit side by side in one row, in the order Stay, Experience, Food, so they can be compared at a glance. From tablet width up all three share the row. On a phone the row scrolls sideways and snaps card by card, with the next card peeking in. The cards are compact: the name line is always two lines tall, so the three cards line up.
 

@@ -1,8 +1,9 @@
 "use client";
 
 import { useId, useState, type ReactNode } from "react";
-import { ChevronDown, type LucideIcon } from "lucide-react";
+import { Check, type LucideIcon } from "lucide-react";
 import { PhotoPlaceholder } from "@/components/cards/PhotoPlaceholder";
+import { usePlan } from "@/components/cards/plan-context";
 import { Button } from "@/components/ui/button";
 import { track } from "@/lib/track";
 import { cn } from "@/lib/utils";
@@ -10,7 +11,7 @@ import { cn } from "@/lib/utils";
 /**
  * The one layout all three cards use, so Stay, Experience and Food read as a
  * family: inset photo with a badge, price headline, name line, two stats, a
- * footer and a full-width button that opens extra details.
+ * footer and two actions.
  *
  * It is compact on purpose: the three cards sit side by side in one row.
  * Each card type only decides what goes in the slots. The badge icon and its
@@ -28,6 +29,8 @@ export type CardAccent = keyof typeof accents;
 export type CardStat = { icon: LucideIcon; value: string; label: string };
 
 export type TripCardView = {
+  /** Content pack row, e.g. "S1". Identifies the card in the traveller's plan. */
+  id: string;
   /** "stay" | "experience" | "food": kept on the element for tests and tracking. */
   type: string;
   badge: { label: string; icon: LucideIcon; accent: CardAccent };
@@ -40,7 +43,13 @@ export type TripCardView = {
   stats: [CardStat, CardStat];
   /** "Hosted by" + "Kenji" on the first line, a short fact on the second. */
   footer: { label: string; value: string; meta: string };
-  /** Shown when "View details" is opened. */
+  actions: {
+    /** Opens the details inside the card: "View stay", "See times", "View restaurant". */
+    view: string;
+    /** Puts the card on the traveller's shortlist: "Save" or "Add to plan". Never a booking. */
+    add: { label: string; doneLabel: string; icon: LucideIcon };
+  };
+  /** Shown when the view action is opened. */
   details: { label: string; value: string }[];
 };
 
@@ -58,17 +67,24 @@ function Stat({ icon: Icon, value, label }: CardStat) {
 export function TripCardShell({ view }: { view: TripCardView }) {
   const [open, setOpen] = useState(false);
   const detailsId = useId();
+  const plan = usePlan();
+  const inPlan = plan.has(view.id);
   const BadgeIcon = view.badge.icon;
+  const AddIcon = inPlan ? Check : view.actions.add.icon;
 
-  function toggle() {
-    if (!open) track("card_opened", view.type);
+  function toggleDetails() {
+    if (!open) track("card_opened", `${view.type}:${view.id}`);
     setOpen((o) => !o);
   }
 
   return (
     <article
       data-card={view.type}
-      className="rounded-[22px] border border-border/70 bg-card p-2 shadow-[0_14px_30px_-22px_rgb(28_25_23/0.45)]"
+      data-in-plan={inPlan}
+      className={cn(
+        "rounded-[22px] border bg-card p-2 shadow-[0_14px_30px_-22px_rgb(28_25_23/0.45)] transition-colors",
+        inPlan ? "border-ink/40" : "border-border/70",
+      )}
     >
       <div className="relative">
         <PhotoPlaceholder
@@ -92,7 +108,10 @@ export function TripCardShell({ view }: { view: TripCardView }) {
           <span className="truncate text-xs text-muted-foreground">{view.headline.label}</span>
         </p>
         {/* Always two lines tall, so the three cards line up whatever the name length. */}
-        <h3 className="mt-1.5 line-clamp-2 min-h-[2.5rem] text-[13px] leading-5 text-muted-foreground" title={`${view.title}, ${view.subtitle}`}>
+        <h3
+          className="mt-1.5 line-clamp-2 min-h-[2.5rem] text-[13px] leading-5 text-muted-foreground"
+          title={`${view.title}, ${view.subtitle}`}
+        >
           <span className="font-medium text-ink">{view.title}</span>
           <span className="mx-1 text-ink" aria-hidden="true">
             •
@@ -128,16 +147,32 @@ export function TripCardShell({ view }: { view: TripCardView }) {
         </dl>
       )}
 
-      <Button
-        type="button"
-        onClick={toggle}
-        aria-expanded={open}
-        aria-controls={open ? detailsId : undefined}
-        className="h-9 w-full rounded-full bg-gradient-to-b from-stone-700 to-stone-950 text-[13px] font-medium text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.18)] hover:from-stone-600 hover:to-stone-900"
-      >
-        {open ? "Hide details" : "View details"}
-        <ChevronDown className={cn("size-3.5 transition-transform", open && "rotate-180")} aria-hidden="true" />
-      </Button>
+      <div className="flex gap-1.5">
+        <Button
+          type="button"
+          onClick={toggleDetails}
+          aria-expanded={open}
+          aria-controls={open ? detailsId : undefined}
+          data-action="view"
+          className="h-9 flex-1 rounded-full bg-gradient-to-b from-stone-700 to-stone-950 px-2.5 text-xs font-medium text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.18)] hover:from-stone-600 hover:to-stone-900"
+        >
+          <span className="whitespace-nowrap">{open ? "Hide details" : view.actions.view}</span>
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => plan.toggle({ id: view.id, type: view.type, title: view.title })}
+          aria-pressed={inPlan}
+          data-action="add"
+          className={cn(
+            "h-9 min-w-0 flex-1 rounded-full px-2.5 text-xs font-medium",
+            inPlan && "border-ink/40 bg-muted text-ink",
+          )}
+        >
+          <AddIcon className="size-3.5" aria-hidden="true" />
+          <span className="truncate">{inPlan ? view.actions.add.doneLabel : view.actions.add.label}</span>
+        </Button>
+      </div>
     </article>
   );
 }

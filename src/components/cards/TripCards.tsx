@@ -6,11 +6,11 @@ import type { TripCard } from "@/lib/types";
 function renderCard(card: TripCard) {
   switch (card.cardType) {
     case "stay":
-      return <StayCard details={card.details} />;
+      return <StayCard details={card.details} sourceRow={card.sourceRow} />;
     case "experience":
-      return <ExperienceCard details={card.details} />;
+      return <ExperienceCard details={card.details} sourceRow={card.sourceRow} />;
     case "food":
-      return <FoodCard details={card.details} />;
+      return <FoodCard details={card.details} sourceRow={card.sourceRow} />;
   }
 }
 

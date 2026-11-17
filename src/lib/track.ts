@@ -1,5 +1,5 @@
 /** Events the usability sessions look for. Nothing is sent anywhere. */
-export type TrackEvent = "failure_injected" | "retry_success" | "card_opened";
+export type TrackEvent = "failure_injected" | "retry_success" | "card_opened" | "plan_added";
 
 type TrackedEvent = { event: TrackEvent; detail?: string; at: string };
 

@@ -1,13 +1,14 @@
-import { BedDouble, Moon, Star } from "lucide-react";
+import { BedDouble, Heart, Moon, Star } from "lucide-react";
 import { TripCardShell, detailRows } from "@/components/cards/card-parts";
 import { formatDateRange, formatUsd } from "@/lib/format";
 import type { StayDetails } from "@/lib/types";
 
-/** Stay: nightly price up top, nights and rating as stats, host and dates in the footer. */
-export function StayCard({ details }: { details: StayDetails }) {
+/** Stay: nightly price up top, nights and rating as stats, host and dates in the footer. Actions: View stay, Save. */
+export function StayCard({ details, sourceRow }: { details: StayDetails; sourceRow: string }) {
   return (
     <TripCardShell
       view={{
+        id: sourceRow,
         type: "stay",
         badge: { label: "Stay", icon: BedDouble, accent: "coral" },
         photo: {
@@ -28,6 +29,7 @@ export function StayCard({ details }: { details: StayDetails }) {
           value: details.hostFirstName,
           meta: formatDateRange(details.checkIn, details.checkOut),
         },
+        actions: { view: "View stay", add: { label: "Save", doneLabel: "Saved", icon: Heart } },
         details: detailRows([
           ["Type", details.propertyType],
           ["Highlight", details.description],
