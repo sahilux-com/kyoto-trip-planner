@@ -1,6 +1,6 @@
 import { kyotoWeekendWorkbook, WEEKEND_BUDGET_USD } from "@/data/kyoto-weekend-workbook";
 import { buildTripPlanResponse } from "@/data/mock-response";
-import type { TripPlanResponse } from "@/lib/types";
+import type { TripCard, TripPlanResponse } from "@/lib/types";
 
 /**
  * The three use cases the prototype can answer. Each is a different Kyoto
@@ -20,10 +20,22 @@ export type TripPlan = {
   intro: string;
   /** Content pack rows the cards are built from. */
   rows: { stay: string; experience: string; food: string };
+  /**
+   * Order the cards appear in. Each plan leads with what its prompt is about:
+   * the food-first weekend opens with the food card, the hands-on weekend with
+   * the pottery experience.
+   */
+  order: [TripCard["cardType"], TripCard["cardType"], TripCard["cardType"]];
   matches: RegExp;
   totalUsd: number;
+  /** The mock response, always stay, experience, food (the agreed contract). */
   cards: TripPlanResponse;
 };
+
+/** The plan's cards in the order the chat shows them. */
+export function orderedCards(plan: TripPlan): TripCard[] {
+  return plan.order.map((type) => plan.cards.find((c) => c.cardType === type)!);
+}
 
 const { Stays, Experiences, Food } = kyotoWeekendWorkbook;
 
@@ -34,6 +46,7 @@ function byId<Row extends { optionId: string }>(rows: Row[], optionId: string): 
 }
 
 function definePlan(plan: Omit<TripPlan, "cards" | "totalUsd">): TripPlan {
+  if (new Set(plan.order).size !== 3) throw new Error(`Plan "${plan.id}" must show each card type once`);
   const stay = byId(Stays, plan.rows.stay);
   const experience = byId(Experiences, plan.rows.experience);
   const food = byId(Food, plan.rows.food);
@@ -56,6 +69,7 @@ export const tripPlans: TripPlan[] = [
     intro:
       "Here's a Kyoto weekend for two. A townhouse near Gion, a tea ceremony on Saturday morning, and ramen for dinner a short walk away.",
     rows: { stay: "S1", experience: "E1", food: "F1" },
+    order: ["stay", "experience", "food"],
     matches: /\b(cultur\w*|tradition\w*|tea|ceremon\w*|temples?|shrines?|quiet|histor\w*|heritage)\b/gi,
   }),
   definePlan({
@@ -64,8 +78,9 @@ export const tripPlans: TripPlan[] = [
     prompt:
       "Plan a food-lover's weekend in Kyoto for two. We want market stalls, street food and a tasting walk with a local cook.",
     intro:
-      "Here's a food-first Kyoto weekend for two. A flat two blocks from Nishiki Market, a tasting walk with a local cook on Saturday, and skewers from a market stall.",
+      "Here's a food-first Kyoto weekend for two. Skewers from a Nishiki Market stall, a tasting walk with a local cook on Saturday, and a flat two blocks from the market.",
     rows: { stay: "S3", experience: "E2", food: "F3" },
+    order: ["food", "experience", "stay"],
     matches: /\b(food\w*|eat\w*|markets?|tasting|cook\w*|snacks?|restaurants?|cuisine|stalls?)\b/gi,
   }),
   definePlan({
@@ -74,8 +89,9 @@ export const tripPlans: TripPlan[] = [
     prompt:
       "Plan a hands-on weekend in Kyoto for two. We'd like to make something in a pottery studio and stay somewhere calm by the river.",
     intro:
-      "Here's a hands-on Kyoto weekend for two. A tatami room by the Kamo River, an afternoon at a pottery wheel in Kiyomizu, and a tofu lunch in Arashiyama.",
+      "Here's a hands-on Kyoto weekend for two. An afternoon at a pottery wheel in Kiyomizu, a quiet tatami room by the Kamo River, and a tofu lunch in Arashiyama.",
     rows: { stay: "S2", experience: "E4", food: "F2" },
+    order: ["experience", "stay", "food"],
     matches: /\b(crafts?|potter\w*|hands-on|hands on|mak(e|ing)|workshops?|ceramics?|rivers?\w*|creative|studios?)\b/gi,
   }),
 ];

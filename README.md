@@ -27,7 +27,8 @@ prompts) and press send.
    second request can't be typed or sent while one is in flight.
 2. **A thinking state plays** for 1.6 seconds: an animated orb, a status line
    and outlines of the three cards that are coming.
-3. **The mock reply arrives:** three cards in the order Stay, Experience, Food,
+3. **The mock reply arrives:** three cards, led by the one the request is about
+   (Food first opens with the food card, Hands-on with the pottery experience),
    built from three rows of the content workbook (one stay row, one experience
    row, one food row), and the chat unlocks.
 

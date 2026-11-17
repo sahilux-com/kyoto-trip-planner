@@ -2,7 +2,7 @@
 
 One-page card and error-state spec for the Airbnb conversational trip-planner prototype. It covers the assistant's reply to one exploratory request and the one error state the prototype must recover from. Layout follows `host_reservation_card_spec.md` (Host Inbox Assistant "Upcoming reservation" card): sketch, field list, what makes the card look different, mock response.
 
-**Scenario.** An exploration-focused traveller (Intent B) types: *"Plan a weekend in Kyoto for two people. We enjoy cultural experiences, Japanese food and quiet neighbourhoods."* The assistant replies with three recommendation cards, always in the order **Stay, Experience, Food**. No filters are asked for first; destination, guests and dates come from the chat.
+**Scenario.** An exploration-focused traveller (Intent B) types: *"Plan a weekend in Kyoto for two people. We enjoy cultural experiences, Japanese food and quiet neighbourhoods."* The assistant replies with three recommendation cards: one stay, one experience and one food place. The card the request is about comes first (see "Card order" below); for this default request the order is **Stay, Experience, Food**. No filters are asked for first; destination, guests and dates come from the chat.
 
 **Fixed sample trip.** Kyoto, Japan · 2 guests · Fri 11 Apr – Sun 13 Apr 2025 · 2 nights. Every card and every mock value uses this trip.
 
@@ -58,7 +58,9 @@ The shortlist appears as a **Your plan** bar above the message box, with one chi
 
 Neither action books, holds or reserves anything. Times, availability and totals in the details are labelled as sample data, the restaurant details say opening hours are not in the sample data, and adding a restaurant does not imply a table is available.
 
-**Row layout.** The three cards sit side by side in one row, in the order Stay, Experience, Food, so they can be compared at a glance. From tablet width up all three share the row. On a phone the row scrolls sideways and snaps card by card, with the next card peeking in. The cards are compact and stretch to the same height, with the buttons pinned to the bottom so they line up.
+**Card order.** Each reply leads with what the request is about: Culture and calm shows Stay, Experience, Food; Food first shows Food, Experience, Stay; Hands-on shows Experience, Stay, Food. The intro sentence follows the same order. The mock response itself stays in the fixed order stay, experience, food; the chat reorders it for display (`order` in `src/data/trip-plans.ts`).
+
+**Row layout.** The three cards sit side by side in one row, so they can be compared at a glance. From tablet width up all three share the row. On a phone the row scrolls sideways and snaps card by card, with the next card peeking in. The cards are compact and stretch to the same height, with the buttons pinned to the bottom so they line up.
 
 The Fields tables below list the mock keys for each card. They are a subset; the full shape is in `src/lib/types.ts`.
 
@@ -112,7 +114,7 @@ The field tables above show the first use case. The other two use the same card 
 
 ## Mock response shape
 
-A mock response is sample data that stands in for the assistant's real answer, written in JSON. The chat reads `cardType` to decide which card to draw. The list always holds exactly three items in the order stay, experience, food. Values are left blank here so the shape can be checked without the content; the example values live in each card's Fields table.
+A mock response is sample data that stands in for the assistant's real answer, written in JSON. The chat reads `cardType` to decide which card to draw. The list always holds exactly three items in the order stay, experience, food. The chat may show them in a different order to lead with what the request is about (see "Card order"). Values are left blank here so the shape can be checked without the content; the example values live in each card's Fields table.
 
 ```json
 [
@@ -181,7 +183,7 @@ Assistant
 | Primary button | Try again |
 | Secondary button | Browse stays. Opens the existing Kyoto stay search in a new tab, so the chat is kept. |
 | Button position | Inside the assistant's chat bubble, bottom right. |
-| What Try again does | Re-sends the same trip request. The traveller does not retype anything. The three cards appear in the order Stay, Experience, Food. |
+| What Try again does | Re-sends the same trip request. The traveller does not retype anything. The three cards appear in the same order the request would have produced. |
 | What is kept | The whole thread: the traveller's original message, the error bubble (without its buttons once used) and any earlier cards. |
 | Accessibility | The error text is announced through the thread's live region, and keyboard focus moves to Try again. |
 | Forced-failure trigger | A moderator-only **Fail next reply** control. It is on the page only when the address includes `?moderator`. It is one-shot: the next request waits 800 ms, fails, and the control switches itself off. Every request after that works normally, so Try again always succeeds. |
@@ -193,7 +195,7 @@ Assistant
 2. Tap **Fail next reply** in the top-right corner. It changes to "Next reply will fail".
 3. Hand over the device. The traveller types "Plan a weekend in Kyoto for two" and presses Send.
 4. The thinking animation plays. Then the error bubble appears and the control resets.
-5. The traveller taps **Try again**. The Stay, Experience and Food cards appear in that order.
+5. The traveller taps **Try again**. The three cards appear, led by the one the request is about (Stay first for the default prompt).
 
 ## Out of scope for this prototype
 

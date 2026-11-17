@@ -1,5 +1,5 @@
-import { pickTripPlan } from "@/data/trip-plans";
-import type { TripPlanResponse } from "@/lib/types";
+import { orderedCards, pickTripPlan } from "@/data/trip-plans";
+import type { TripCard } from "@/lib/types";
 
 /** How long the thinking animation shows before the cards arrive. */
 export const THINKING_DELAY_MS = 1600;
@@ -20,7 +20,8 @@ export type TripPlanReply = {
   planId: string;
   /** What the assistant says above the cards. */
   intro: string;
-  cards: TripPlanResponse;
+  /** The three cards, led by the one the request is about. */
+  cards: TripCard[];
 };
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -43,5 +44,5 @@ export async function requestTripPlan(
   }
   await sleep(THINKING_DELAY_MS);
   const plan = pickTripPlan(message);
-  return { planId: plan.id, intro: plan.intro, cards: plan.cards };
+  return { planId: plan.id, intro: plan.intro, cards: orderedCards(plan) };
 }
