@@ -1,13 +1,13 @@
 /**
  * Kyoto weekend content workbook, as code.
  *
- * Transcribed from "Kyoto Weekend Prototype Content Pack.xlsx" (compiled by
- * Priya Raman, PM Search, 2025-03-07). One sheet per card type, one row per
- * option, same columns as the spreadsheet. Blank cells are `null`.
+ * Transcribed from "Kyoto Weekend Prototype Content Pack.xlsx". One sheet per
+ * card type, one row per option, same columns as the spreadsheet. Blank cells
+ * are `null`.
  *
  * Prices are USD for 2 guests, against a $600 reference budget for the
- * weekend. There are no photo URLs because image rights for the prototype are
- * not cleared, so the cards draw grey placeholders.
+ * weekend. The pack has no photo URLs because image rights for the real
+ * listings are not cleared, so the cards show stock photos instead.
  *
  * Fixed sample trip: Kyoto, 2 guests, Fri 11 Apr – Sun 13 Apr 2025.
  */
