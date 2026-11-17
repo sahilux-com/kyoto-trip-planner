@@ -13,7 +13,7 @@ export function ThinkingBubble() {
     <div className="animate-rise space-y-4" role="status" aria-label="Assistant is thinking">
       <div className="flex items-start gap-3">
         <AssistantAvatar />
-        <p className="flex items-center gap-2 pt-1.5 text-[15px]">
+        <p className="flex items-center gap-2 pt-2 text-[15px]">
           {/* The orb shows the assistant is working. It draws in the text colour, so text-coral
               tints it, and it holds still under prefers-reduced-motion. */}
           <span className="flex shrink-0" aria-hidden="true" data-thinking-orb>

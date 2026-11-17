@@ -52,7 +52,7 @@ export function MessageBubble({ message, onRetry }: Props) {
             className={
               isWelcome
                 ? "max-w-[30ch] text-[22px] leading-[1.3] font-normal tracking-tight text-ink sm:text-[26px]"
-                : "max-w-[58ch] pt-1.5 text-[15px] leading-relaxed text-ink"
+                : "max-w-[58ch] pt-2 text-[15px] leading-relaxed text-ink"
             }
           >
             {message.text}
