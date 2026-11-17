@@ -3,15 +3,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 /**
  * Shown while the plan is being put together, so the thread is never blank.
- * The ghosts underneath have the outline of the three cards that are coming:
- * banner on top, strip on the left, circle on the right.
+ * The ghosts underneath have the outline of the row of three cards that is coming.
  */
 export function ThinkingBubble() {
   return (
-    <div className="flex animate-rise items-start gap-3" role="status" aria-label="Assistant is thinking">
-      <AssistantAvatar />
-      <div className="min-w-0 flex-1 space-y-3.5 pt-1">
-        <p className="flex items-center gap-2.5 text-[15px]">
+    <div className="animate-rise space-y-4" role="status" aria-label="Assistant is thinking">
+      <div className="flex items-start gap-3">
+        <AssistantAvatar />
+        <p className="flex items-center gap-2.5 pt-1 text-[15px]">
           <span className="flex items-center gap-1" aria-hidden="true">
             {[0, 1, 2].map((i) => (
               <span
@@ -23,33 +22,22 @@ export function ThinkingBubble() {
           </span>
           <span className="text-sheen animate-sheen">Putting your Kyoto weekend together…</span>
         </p>
+      </div>
 
-        <div className="space-y-3" aria-hidden="true" data-thinking-ghosts>
-          {/* Stay */}
-          <div className="overflow-hidden rounded-3xl border border-border/70 bg-card/60">
-            <Skeleton className="h-24 w-full rounded-none" />
-            <div className="space-y-2 px-5 py-4">
-              <Skeleton className="h-5 w-3/5 rounded-full" />
-              <Skeleton className="h-3 w-2/5 rounded-full" />
-            </div>
-          </div>
-          {/* Experience */}
-          <div className="flex overflow-hidden rounded-3xl border border-border/70 bg-card/60">
-            <Skeleton className="w-24 shrink-0 self-stretch rounded-none sm:w-32" />
-            <div className="flex-1 space-y-2 px-5 py-4">
-              <Skeleton className="h-5 w-4/5 rounded-full" />
-              <Skeleton className="h-3 w-1/4 rounded-full" />
-            </div>
-          </div>
-          {/* Food */}
-          <div className="flex items-center justify-between gap-4 rounded-3xl bg-muted/50 px-5 py-4">
-            <div className="flex-1 space-y-2">
+      <div className="-mx-4 flex gap-2.5 overflow-hidden px-4 md:mx-0 md:px-0" aria-hidden="true" data-thinking-ghosts>
+        {[0, 1, 2].map((i) => (
+          <div
+            key={i}
+            className="w-[16.5rem] shrink-0 rounded-[22px] border border-border/70 bg-card/60 p-2 md:w-auto md:min-w-0 md:flex-1 md:basis-0"
+          >
+            <Skeleton className="aspect-[4/3] w-full rounded-[16px]" />
+            <div className="space-y-2 px-1.5 pt-3 pb-2">
               <Skeleton className="h-5 w-2/5 rounded-full" />
+              <Skeleton className="h-3 w-4/5 rounded-full" />
               <Skeleton className="h-3 w-3/5 rounded-full" />
             </div>
-            <Skeleton className="size-12 shrink-0 rounded-full" />
           </div>
-        </div>
+        ))}
       </div>
     </div>
   );

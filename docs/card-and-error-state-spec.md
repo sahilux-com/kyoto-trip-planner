@@ -8,25 +8,43 @@ One-page card and error-state spec for the Airbnb conversational trip-planner pr
 
 **Content source.** Example values come from the Kyoto Weekend Prototype Content Pack: rows S1 (Stays), E1 (Experiences) and F1 (Food). Together they cost $516 for two against the pack's $600 reference budget. This is the first of three use cases; see "Three use cases" below. The pack has no photo URLs because rights for the real photos are not cleared, so each image slot shows a stock photo from Unsplash for illustration. It does not show the place on the card. Where the spec says "image placeholder", read it as that photo slot; a grey stand-in is drawn if a photo is missing.
 
-**Rules for all three cards.** Each card has one image placeholder, one line of biggest text and one accent colour. No two cards share the same image placement, biggest-text type or accent colour (see the check table after the Food card).
+**One layout for all three cards.** Stay, Experience and Food use the same card component, so they read as one family. The earlier version of this spec gave each card a different layout (banner, side strip, round thumbnail); that was replaced after review because the cards looked unrelated. What tells the cards apart now is the badge on the photo, its accent colour and the content.
+
+```
++-----------------------------------------------+
+|  +-----------------------------------------+  |
+|  | ( * Stay )                              |  |  <- badge: icon in accent colour + card type
+|  |                 photo                   |  |
+|  +-----------------------------------------+  |
+|  $168  per night                              |  <- headline: biggest text + small label
+|  Restored machiya townhouse near Gion         |  <- name, then area in grey
+|  • Gion, Kyoto                                |
+|  -------------------------------------------  |
+|   2 Nights          |   4.92 Rating           |  <- two stats
+|  -------------------------------------------  |
+|  Hosted by • Kenji             11 – 13 Apr    |  <- footer: who / when
+|  [              View details               ]  |  <- opens extra details inside the card
++-----------------------------------------------+
+```
+
+| Slot | Stay | Experience | Food |
+|---|---|---|---|
+| Badge | Stay, coral | Experience, violet | Food, amber |
+| Headline | Nightly price, "per night" | Price per guest, "per guest" | Estimated cost, "for two, estimated" |
+| Name line | Listing title, neighbourhood | Experience title, category | Place name, cuisine and area |
+| Stat 1 | Nights | Duration | Walk from stay |
+| Stat 2 | Guest rating | Rating | Price level |
+| Footer line 1 | Hosted by, host first name | Hosted by, host first name (or "to be confirmed") | Good for, meal |
+| Footer line 2 | Dates | Day and start time | Neighbourhood |
+| View details | Property type, highlight, total, reviews | Meeting point, total for two, availability | Booking note, cuisine, area |
+
+**View details** opens a short list inside the card and records a `card_opened` event in the page. It does not book or hold anything, and totals and availability are labelled as sample data.
+
+**Row layout.** The three cards sit side by side in one row, in the order Stay, Experience, Food, so they can be compared at a glance. From tablet width up all three share the row. On a phone the row scrolls sideways and snaps card by card, with the next card peeking in. The cards are compact: the name line is always two lines tall, so the three cards line up.
+
+The Fields tables below list the mock keys for each card. They are a subset; the full shape is in `src/lib/types.ts`.
 
 ## Stay card
-
-### Sketch
-
-```
-+===============================================+  <- coral top border
-|                                               |
-|        [ image placeholder: wide banner ]     |
-|                                               |
-+-----------------------------------------------+
-|  Fri 11 Apr – Sun 13 Apr 2025 · 2 nights      |  <- biggest text
-|  Restored machiya townhouse near Gion ·       |
-|  Kyoto, Japan                                 |
-|  $168 USD / night                             |
-|  Private garden and cedar soaking tub.        |
-+-----------------------------------------------+
-```
 
 ### Fields
 
@@ -39,26 +57,7 @@ One-page card and error-state spec for the Airbnb conversational trip-planner pr
 | Nightly price (USD) | `nightlyPriceUsd` | 168 |
 | Short description | `description` | Private garden and cedar soaking tub. (The pack's Highlight column.) |
 
-### What makes this card look different
-
-- Image placeholder: a wide grey banner across the full top of the card.
-- Biggest text: the travel dates and night count.
-- Accent colour: coral, as a thick top border.
-- Shape: tall, image-first. Reads like a listing.
-
 ## Experience card
-
-### Sketch
-
-```
-+--------+--------------------------------------+
-|        |  Tea ceremony in a 100-year-old      |  <- biggest text
-| image  |  machiya                             |
-| (tall  |  2 hours                             |
-| strip) |  [SAT] Starts 10:30. Meeting point:  |  <- purple day label
-|        |        Outside Gion-Shijo Station    |
-+--------+--------------------------------------+
-```
 
 ### Fields
 
@@ -70,25 +69,7 @@ One-page card and error-state spec for the Airbnb conversational trip-planner pr
 
 The content pack schedules every experience on Sat 12 Apr only, so the day plan has one line. `dayPlan` stays a list so a Sunday line can be added if content for it arrives.
 
-### What makes this card look different
-
-- Image placeholder: a tall grey strip down the left edge.
-- Biggest text: the activity name.
-- Accent colour: purple, on the day label only.
-- Shape: wide, two-column, with a day-by-day list. Reads like a schedule.
-
 ## Food card
-
-### Sketch
-
-```
-+-----------------------------------------------+
-|  Menya Inoichi                       ( img )  |  <- biggest text; round image, right
-|  Dinner · $                                   |  <- amber label
-|  Ramen in Gion, 8 min walk from your stay.    |
-|  No reservations - arrive before 18:00.       |
-+-----------------------------------------------+
-```
 
 ### Fields
 
@@ -98,25 +79,6 @@ The content pack schedules every experience on Sat 12 Apr only, so the day plan 
 | Meal type | `mealType` | Dinner |
 | Price range | `priceRange` | $ |
 | Short description | `description` | Ramen in Gion, 8 min walk from your stay. No reservations - arrive before 18:00. (Built from the pack's Cuisine, Neighbourhood, Walk from Stay and Booking Note columns.) |
-
-### What makes this card look different
-
-- Image placeholder: a small round thumbnail in the top-right corner.
-- Biggest text: the restaurant name.
-- Accent colour: amber, on the meal type and price label.
-- Shape: short, a few lines, no accent border. Reads like a quick tip.
-
-## Differentiation check
-
-| | Stay | Experience | Food |
-|---|---|---|---|
-| Image placeholder | Wide banner, top | Tall strip, left | Small circle, top right |
-| Biggest text | Dates + nights | Activity name | Restaurant name |
-| Accent colour | Coral | Purple | Amber |
-| Accent placed on | Top border | Day labels | Meal / price label |
-| Card height | Tall | Medium | Short |
-
-No column repeats a value from another column, so the three cards cannot be mistaken for one another at a glance.
 
 ## Three use cases
 
@@ -128,7 +90,7 @@ The chat answers three different requests, each with its own stay, experience an
 | Food first | Plan a food-lover's weekend in Kyoto for two. We want market stalls, street food and a tasting walk with a local cook. | S3, E2, F3 | $449 |
 | Hands-on | Plan a hands-on weekend in Kyoto for two. We'd like to make something in a pottery studio and stay somewhere calm by the river. | S2, E4, F2 | $520 |
 
-The card sketches and field tables above show the first use case. The other two use the same three card layouts with their own rows.
+The field tables above show the first use case. The other two use the same card layout with their own rows.
 
 ## Mock response shape
 
@@ -205,7 +167,7 @@ Assistant
 | What is kept | The whole thread: the traveller's original message, the error bubble (without its buttons once used) and any earlier cards. |
 | Accessibility | The error text is announced through the thread's live region, and keyboard focus moves to Try again. |
 | Forced-failure trigger | A moderator-only **Fail next reply** control. It is on the page only when the address includes `?moderator`. It is one-shot: the next request waits 800 ms, fails, and the control switches itself off. Every request after that works normally, so Try again always succeeds. |
-| Events | `failure_injected` when the armed request is sent, `retry_success` when a retry returns the cards. Both are logged to the browser console and kept on `window.__tripPlannerEvents`; nothing is sent anywhere. |
+| Events | `failure_injected` when the armed request is sent, `retry_success` when a retry returns the cards (and `card_opened` when View details is tapped on a card). Both are logged to the browser console and kept on `window.__tripPlannerEvents`; nothing is sent anywhere. |
 
 ### Steps to fire the trigger (usability test script)
 

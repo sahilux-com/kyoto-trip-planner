@@ -39,18 +39,19 @@ that matches none of them gets the first one.
 | Row-to-card mapping and the mock response builder | `src/data/mock-response.ts` |
 | The single seam between the chat and "the assistant" (delay, mock, injected failure) | `src/lib/trip-planner.ts` |
 | Chat page, thinking state, composer, error bubble, moderator control | `src/components/chat/` |
-| The three cards, each with a different layout | `src/components/cards/` |
+| The shared card layout and the three cards built on it | `src/components/cards/` |
 | Card and error-state spec | [`docs/card-and-error-state-spec.md`](docs/card-and-error-state-spec.md) |
 
 Stack: Next.js (App Router), React, TypeScript, Tailwind CSS v4. No backend.
 
-## What makes the cards distinct
+## The cards
 
-| | Stay | Experience | Food |
-|---|---|---|---|
-| Photo | Wide banner, top | Tall strip, left | Small circle, top right |
-| Biggest text | Dates and nights | Activity name | Restaurant name |
-| Accent colour | Coral top border | Purple day labels | Amber meal / price label |
+Stay, Experience and Food share one layout (`src/components/cards/card-parts.tsx`):
+an inset photo with a badge, a price headline, a name line, two stats, a footer
+row and a **View details** button that opens extra details inside the card.
+Each card type maps its own content pack fields onto those slots. The three cards sit
+side by side in one row; on a phone the row scrolls sideways. The badge and
+its accent colour (coral, violet, amber) tell the cards apart.
 
 ## Error state
 
@@ -60,7 +61,7 @@ and fails, the assistant shows an apology bubble with **Try again** and
 **Browse stays**, and the control switches itself off. Try again re-sends the
 same prompt and returns the three cards; the thread is never cleared.
 
-`failure_injected` and `retry_success` are logged to the console and kept on
+`failure_injected`, `retry_success` and `card_opened` are logged to the console and kept on
 `window.__tripPlannerEvents`. Nothing is sent anywhere.
 
 ## Design and components

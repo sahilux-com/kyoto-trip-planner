@@ -106,7 +106,7 @@ export function ChatThread() {
       )}
 
       <div className="flex-1 overflow-y-auto">
-        <div className="mx-auto w-full max-w-2xl space-y-6 px-4 pt-5 pb-44" aria-live="polite">
+        <div className="mx-auto w-full max-w-4xl space-y-6 px-4 pt-5 pb-44" aria-live="polite">
           {messages.map((message) => (
             <MessageBubble key={message.id} message={message} onRetry={retry} />
           ))}
@@ -145,7 +145,7 @@ export function ChatThread() {
       </div>
 
       <div className="pointer-events-none fixed inset-x-0 bottom-0 z-20 bg-gradient-to-t from-paper via-paper/95 to-transparent pt-10 pb-4">
-        <div className="pointer-events-auto mx-auto w-full max-w-2xl px-4">
+        <div className="pointer-events-auto mx-auto w-full max-w-4xl px-4">
           <Composer disabled={thinking} onSend={send} />
           <p className="mt-2.5 flex items-center justify-center gap-1.5 text-center text-[11px] text-muted-foreground">
             <Info className="size-3 shrink-0" aria-hidden="true" />

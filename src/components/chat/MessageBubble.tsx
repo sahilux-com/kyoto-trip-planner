@@ -10,7 +10,7 @@ export function MessageBubble({ message, onRetry }: Props) {
   if (message.role === "user") {
     return (
       <div className="flex animate-rise justify-end">
-        <p className="max-w-[82%] rounded-[1.35rem] rounded-br-md bg-ink px-4 py-2.5 text-[15px] leading-relaxed text-primary-foreground shadow-[0_8px_20px_-12px_rgb(28_25_23/0.7)]">
+        <p className="max-w-[min(82%,34rem)] rounded-[1.35rem] rounded-br-md bg-ink px-4 py-2.5 text-[15px] leading-relaxed text-primary-foreground shadow-[0_8px_20px_-12px_rgb(28_25_23/0.7)]">
           {message.text}
         </p>
       </div>
@@ -44,9 +44,9 @@ export function MessageBubble({ message, onRetry }: Props) {
   const isWelcome = message.id === "welcome";
 
   return (
-    <div className="flex animate-rise items-start gap-3">
-      <AssistantAvatar />
-      <div className="min-w-0 flex-1 space-y-4">
+    <div className="animate-rise space-y-4">
+      <div className="flex items-start gap-3">
+        <AssistantAvatar />
         {message.text && (
           <p
             className={
@@ -58,8 +58,9 @@ export function MessageBubble({ message, onRetry }: Props) {
             {message.text}
           </p>
         )}
-        {message.cards && <TripCards cards={message.cards} />}
       </div>
+      {/* The card row uses the full width of the thread, not the text column beside the avatar. */}
+      {message.cards && <TripCards cards={message.cards} />}
     </div>
   );
 }

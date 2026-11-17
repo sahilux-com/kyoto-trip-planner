@@ -12,6 +12,12 @@ export type StayDetails = {
   guests: number;
   /** Total for the stay as given in the content pack. Unverified. */
   totalUsd: number;
+  nights: number;
+  neighbourhood: string;
+  propertyType: string;
+  rating: number;
+  reviewCount: number;
+  hostFirstName: string;
   /** Stock photo for illustration, not a photo of this listing. null draws a placeholder. */
   imageUrl: string | null;
   imageAlt: string;
@@ -33,6 +39,13 @@ export type ExperienceDetails = {
   pricePerGuestUsd: number;
   /** Sample value from the content pack, not live availability. */
   availability: string;
+  durationHours: number;
+  category: string;
+  /** null where the content pack leaves the host blank. */
+  hostFirstName: string | null;
+  rating: number;
+  meetingPoint: string;
+  totalFor2Usd: number;
   imageUrl: string | null;
   imageAlt: string;
   imagePosition: string;
@@ -48,6 +61,9 @@ export type FoodDetails = {
   walkFromStayMin: number;
   /** null: the content pack has a booking note but no opening hours. */
   openingHours: string | null;
+  estCostFor2Usd: number;
+  /** null where the content pack has no booking note. */
+  bookingNote: string | null;
   imageUrl: string | null;
   imageAlt: string;
   imagePosition: string;

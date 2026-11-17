@@ -14,15 +14,22 @@ function renderCard(card: TripCard) {
   }
 }
 
-/** Draws the cards in the order the response gives them, staggering their entrance. */
+/**
+ * Draws the cards side by side, in the order the response gives them.
+ * From tablet width up all three share the row. On a phone the row scrolls
+ * sideways and snaps card by card, with the next card peeking in.
+ */
 export function TripCards({ cards }: { cards: TripCard[] }) {
   return (
-    <ol className="space-y-3.5" aria-label="Trip recommendations">
+    <ol
+      className="-mx-4 flex snap-x snap-mandatory scroll-px-4 items-start gap-2.5 overflow-x-auto px-4 pt-1 pb-5 [scrollbar-width:none] md:mx-0 md:overflow-visible md:px-0 md:pb-1 [&::-webkit-scrollbar]:hidden"
+      aria-label="Trip recommendations"
+    >
       {cards.map((card, i) => (
         <li
           key={card.cardType}
-          className="animate-card-in opacity-0"
-          style={{ animationDelay: `${i * 160}ms` }}
+          className="w-[16.5rem] shrink-0 snap-start animate-card-in opacity-0 md:w-auto md:min-w-0 md:flex-1 md:basis-0"
+          style={{ animationDelay: `${i * 140}ms` }}
         >
           {renderCard(card)}
         </li>

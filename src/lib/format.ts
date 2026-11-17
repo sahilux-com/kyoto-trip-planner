@@ -19,5 +19,15 @@ export function formatStayDates(checkIn: string, checkOut: string): string {
   return `${dayFmt.format(start)} – ${dayFmt.format(end)} ${year} · ${nights} night${nights === 1 ? "" : "s"}`;
 }
 
+/** "11 – 13 Apr 2025", or "28 Apr – 2 May 2025" across months. */
+export function formatDateRange(startIso: string, endIso: string): string {
+  const start = toDate(startIso);
+  const end = toDate(endIso);
+  const month = (d: Date) => d.toLocaleString("en-GB", { month: "short", timeZone: "UTC" });
+  const sameMonth = start.getUTCMonth() === end.getUTCMonth() && start.getUTCFullYear() === end.getUTCFullYear();
+  const from = sameMonth ? `${start.getUTCDate()}` : `${start.getUTCDate()} ${month(start)}`;
+  return `${from} – ${end.getUTCDate()} ${month(end)} ${end.getUTCFullYear()}`;
+}
+
 export const formatUsd = (amount: number) =>
   new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(amount);

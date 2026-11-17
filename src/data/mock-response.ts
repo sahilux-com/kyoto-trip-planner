@@ -29,6 +29,12 @@ export function stayCardFromRow(row: StayRow): StayDetails {
     description: sentence(row.highlight),
     guests: GUESTS,
     totalUsd: row.totalFor2NightsUsd,
+    nights: row.nights,
+    neighbourhood: row.neighbourhood,
+    propertyType: row.propertyType,
+    rating: row.guestRating,
+    reviewCount: row.reviewCount,
+    hostFirstName: row.hostFirstName,
     ...photoFields(row.optionId),
   };
 }
@@ -44,6 +50,12 @@ export function experienceCardFromRow(row: ExperienceRow): ExperienceDetails {
     partySize: GUESTS,
     pricePerGuestUsd: row.pricePerGuestUsd,
     availability: row.availability,
+    durationHours: row.durationHours,
+    category: row.category,
+    hostFirstName: row.hostFirstName,
+    rating: row.rating,
+    meetingPoint: row.meetingPoint,
+    totalFor2Usd: row.totalFor2GuestsUsd,
     ...photoFields(row.optionId),
   };
 }
@@ -59,6 +71,8 @@ export function foodCardFromRow(row: FoodRow): FoodDetails {
     area: row.neighbourhood,
     walkFromStayMin: row.walkFromStayMin,
     openingHours: null,
+    estCostFor2Usd: row.estCostFor2Usd,
+    bookingNote: row.bookingNote ? sentence(row.bookingNote) : null,
     ...photoFields(row.optionId),
   };
 }
