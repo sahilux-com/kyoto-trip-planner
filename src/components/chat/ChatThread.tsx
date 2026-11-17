@@ -16,6 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipPopup, TooltipTrigger } from "@/components/ui/tooltip";
 import { track } from "@/lib/track";
+import { pickTripPlan, type TripPlan } from "@/data/trip-plans";
 import { requestTripPlan } from "@/lib/trip-planner";
 
 const noSubscription = () => () => {};
@@ -30,6 +31,8 @@ const resolveErrors = (messages: ChatMessage[]) =>
 export function ChatThread() {
   const [messages, setMessages] = useState<ChatMessage[]>([WELCOME_MESSAGE]);
   const [thinking, setThinking] = useState(false);
+  /** Card order of the reply on its way, so the loading outlines match the cards that replace them. */
+  const [pendingOrder, setPendingOrder] = useState<TripPlan["order"]>(["stay", "experience", "food"]);
   /** One-shot: the next request fails, then this turns itself off. */
   const [failNext, setFailNext] = useState(false);
   /** The moderator control only exists when the address has `?moderator`. */
@@ -48,6 +51,7 @@ export function ChatThread() {
       setFailNext(false);
       track("failure_injected");
     }
+    setPendingOrder(pickTripPlan(prompt).order);
     setThinking(true);
     try {
       const { intro, cards } = await requestTripPlan(prompt, { fail });
@@ -113,7 +117,7 @@ export function ChatThread() {
           {messages.map((message) => (
             <MessageBubble key={message.id} message={message} onRetry={retry} />
           ))}
-          {thinking && <ThinkingBubble />}
+          {thinking && <ThinkingBubble order={pendingOrder} />}
           {showSuggestion && (
             <div className="animate-rise pl-[52px] [animation-delay:120ms]">
               <p className="mb-2 text-[11px] font-semibold tracking-[0.14em] text-muted-foreground uppercase">

@@ -3,12 +3,17 @@
 import { Orb } from "@yogesharc/thinking-orbs";
 import { AssistantAvatar } from "@/components/chat/Avatar";
 import { Skeleton } from "@/components/ui/skeleton";
+import type { TripPlan } from "@/data/trip-plans";
+
+/** Photo position of each card type, as drawn by the real cards. */
+const LAYOUT = { stay: "top", experience: "side", food: "thumb" } as const;
 
 /**
  * Shown while the plan is being put together, so the thread is never blank.
- * The ghosts underneath have the outline of the row of three cards that is coming.
+ * The ghosts underneath have the outline of the row of three cards that is coming,
+ * in the same order, so Food first shows the food outline first.
  */
-export function ThinkingBubble() {
+export function ThinkingBubble({ order }: { order: TripPlan["order"] }) {
   return (
     <div className="animate-rise space-y-4" role="status" aria-label="Assistant is thinking">
       <div className="flex items-start gap-3">
@@ -24,8 +29,8 @@ export function ThinkingBubble() {
       </div>
 
       <div className="-mx-4 flex gap-2.5 overflow-hidden px-4 md:mx-0 md:px-0" aria-hidden="true" data-thinking-ghosts>
-        {/* Same three photo positions as the real cards: top, side, thumbnail. */}
-        {(["top", "side", "thumb"] as const).map((layout) => (
+        {/* Same photo positions as the real cards (top, side, thumbnail), in the reply's order. */}
+        {order.map((type) => LAYOUT[type]).map((layout) => (
           <div
             key={layout}
             className="w-[16.5rem] shrink-0 rounded-[22px] border border-border/70 bg-card/60 p-2 md:w-auto md:min-w-0 md:flex-1 md:basis-0"
