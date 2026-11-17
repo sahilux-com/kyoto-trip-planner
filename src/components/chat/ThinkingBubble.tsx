@@ -1,6 +1,7 @@
 "use client";
 
 import { Orb } from "@yogesharc/thinking-orbs";
+import { AssistantAvatar } from "@/components/chat/Avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 
 /**
@@ -11,12 +12,13 @@ export function ThinkingBubble() {
   return (
     <div className="animate-rise space-y-4" role="status" aria-label="Assistant is thinking">
       <div className="flex items-start gap-3">
-        {/* The orb stands in for the assistant's mark while it thinks. It draws in the
-            text colour, so text-coral tints it, and holds still under prefers-reduced-motion. */}
-        <span className="flex size-7 shrink-0 items-center justify-center" aria-hidden="true" data-thinking-orb>
-          <Orb state="reasoning" size={28} className="text-coral" />
-        </span>
-        <p className="pt-1 text-[15px]">
+        <AssistantAvatar />
+        <p className="flex items-center gap-2 pt-1.5 text-[15px]">
+          {/* The orb shows the assistant is working. It draws in the text colour, so text-coral
+              tints it, and it holds still under prefers-reduced-motion. */}
+          <span className="flex shrink-0" aria-hidden="true" data-thinking-orb>
+            <Orb state="reasoning" size={22} className="text-coral" />
+          </span>
           <span className="text-sheen animate-sheen">Putting your Kyoto weekend together…</span>
         </p>
       </div>

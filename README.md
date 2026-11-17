@@ -83,7 +83,9 @@ same prompt and returns the three cards; the thread is never cleared.
 Lexend Deca throughout, on a warm paper background. UI primitives come from
 shadcn/ui (button, badge, card, separator) and coss ui, formerly Origin UI
 (skeleton, tooltip), in `src/components/ui/`. The thinking orb is from
-[`@yogesharc/thinking-orbs`](https://thinkingorbs.com).
+[`@yogesharc/thinking-orbs`](https://thinkingorbs.com). The assistant's avatar is
+the orange character from [OpenDots](https://github.com/CopilotKit/OpenDots)
+(MIT; licence in `public/avatars/`).
 
 ## Photo credits
 

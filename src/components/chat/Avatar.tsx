@@ -1,13 +1,26 @@
-import { Sparkles } from "lucide-react";
+import Image from "next/image";
 
-/** Small coral mark that sits beside everything the assistant says. */
+/**
+ * The assistant's profile picture: the orange character from OpenDots
+ * (github.com/CopilotKit/OpenDots, MIT; licence in public/avatars/).
+ * It is decorative, so screen readers skip it.
+ */
 export function AssistantAvatar() {
   return (
-    <div
+    <span
       aria-hidden="true"
-      className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full bg-coral text-white shadow-[0_2px_8px_-2px_rgb(255_56_92/0.6)]"
+      data-assistant-avatar
+      className="flex size-9 shrink-0 items-center justify-center rounded-full bg-orange-100 ring-1 ring-orange-200/80"
     >
-      <Sparkles className="size-3.5" strokeWidth={2.4} />
-    </div>
+      <Image
+        src="/avatars/dot-orange.png"
+        alt=""
+        width={36}
+        height={36}
+        loading="eager"
+        draggable={false}
+        className="size-8 object-contain"
+      />
+    </span>
   );
 }

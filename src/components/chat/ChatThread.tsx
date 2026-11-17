@@ -115,7 +115,7 @@ export function ChatThread() {
           ))}
           {thinking && <ThinkingBubble />}
           {showSuggestion && (
-            <div className="animate-rise pl-10 [animation-delay:120ms]">
+            <div className="animate-rise pl-12 [animation-delay:120ms]">
               <p className="mb-2 text-[11px] font-semibold tracking-[0.14em] text-muted-foreground uppercase">
                 Try one of these
               </p>
