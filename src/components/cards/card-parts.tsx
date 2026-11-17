@@ -203,7 +203,7 @@ export function TripCardShell({ view }: { view: TripCardView }) {
       )}
     >
       {/* Accent rule across the top: the card's colour, visible even before the photo loads. */}
-      <span aria-hidden="true" className={cn("absolute inset-x-0 top-0 h-[3px]", accents[view.badge.accent].rule)} />
+      <span aria-hidden="true" className={cn("absolute inset-x-0 top-0 h-[2px]", accents[view.badge.accent].rule)} />
 
       <CardTop view={view} />
 
