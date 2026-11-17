@@ -3,13 +3,17 @@ import { TripCardShell, detailRows } from "@/components/cards/card-parts";
 import { formatDateRange, formatUsd } from "@/lib/format";
 import type { StayDetails } from "@/lib/types";
 
-/** Stay: nightly price up top, nights and rating as stats, host and dates in the footer. Actions: View stay, Save. */
+/**
+ * Stay: photo across the top, nightly price as the biggest text, coral accent.
+ * Nights and rating as stats, host and dates in the footer. Actions: View stay, Save.
+ */
 export function StayCard({ details, sourceRow }: { details: StayDetails; sourceRow: string }) {
   return (
     <TripCardShell
       view={{
         id: sourceRow,
         type: "stay",
+        layout: "top",
         badge: { label: "Stay", icon: BedDouble, accent: "coral" },
         photo: {
           src: details.imageUrl,

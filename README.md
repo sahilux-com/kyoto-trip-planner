@@ -58,14 +58,19 @@ Stack: Next.js (App Router), React, TypeScript, Tailwind CSS v4. No backend.
 
 ## The cards
 
-Stay, Experience and Food share one layout (`src/components/cards/card-parts.tsx`):
-an inset photo with a badge, a price headline, a name line, two stats, a footer
-row and two actions. The first (View stay, See times, View restaurant) opens
-extra details inside the card; the second (Save, Add to plan) puts the card on
-a **Your plan** shortlist shown above the message box. Nothing is booked.
-Each card type maps its own content pack fields onto those slots. The three cards sit
-side by side in one row; on a phone the row scrolls sideways. The badge and
-its accent colour (coral, violet, amber) tell the cards apart.
+Stay, Experience and Food share one frame (`src/components/cards/card-parts.tsx`):
+two stats, a footer row and two actions. Three things tell them apart:
+
+| | Stay | Experience | Food |
+|---|---|---|---|
+| Image position | Top | Side | Thumbnail |
+| Biggest text | Nightly price | Start time | Restaurant name |
+| Accent colour | Coral | Violet | Amber |
+
+The first action (View stay, See times, View restaurant) opens extra details
+inside the card; the second (Save, Add to plan) puts the card on a **Your plan**
+shortlist shown above the message box. Nothing is booked. The three cards sit
+side by side in one row; on a phone the row scrolls sideways.
 
 ## Error state
 

@@ -24,12 +24,23 @@ export function ThinkingBubble() {
       </div>
 
       <div className="-mx-4 flex gap-2.5 overflow-hidden px-4 md:mx-0 md:px-0" aria-hidden="true" data-thinking-ghosts>
-        {[0, 1, 2].map((i) => (
+        {/* Same three photo positions as the real cards: top, side, thumbnail. */}
+        {(["top", "side", "thumb"] as const).map((layout) => (
           <div
-            key={i}
+            key={layout}
             className="w-[16.5rem] shrink-0 rounded-[22px] border border-border/70 bg-card/60 p-2 md:w-auto md:min-w-0 md:flex-1 md:basis-0"
           >
-            <Skeleton className="aspect-[4/3] w-full rounded-[16px]" />
+            {layout === "top" && <Skeleton className="aspect-[4/3] w-full rounded-[16px]" />}
+            {layout === "side" && (
+              <div className="flex gap-3">
+                <Skeleton className="aspect-[3/4] w-[44%] shrink-0 rounded-[16px]" />
+                <div className="flex flex-1 flex-col justify-between py-1">
+                  <Skeleton className="h-5 w-3/4 rounded-full" />
+                  <Skeleton className="h-5 w-full rounded-full" />
+                </div>
+              </div>
+            )}
+            {layout === "thumb" && <Skeleton className="m-1.5 size-16 rounded-[14px]" />}
             <div className="space-y-2 px-1.5 pt-3 pb-2">
               <Skeleton className="h-5 w-2/5 rounded-full" />
               <Skeleton className="h-3 w-4/5 rounded-full" />

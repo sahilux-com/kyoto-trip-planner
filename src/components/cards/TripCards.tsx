@@ -22,7 +22,7 @@ function renderCard(card: TripCard) {
 export function TripCards({ cards }: { cards: TripCard[] }) {
   return (
     <ol
-      className="-mx-4 flex snap-x snap-mandatory scroll-px-4 items-start gap-2.5 overflow-x-auto px-4 pt-1 pb-5 [scrollbar-width:none] md:mx-0 md:overflow-visible md:px-0 md:pb-1 [&::-webkit-scrollbar]:hidden"
+      className="-mx-4 flex snap-x snap-mandatory scroll-px-4 items-stretch gap-2.5 overflow-x-auto px-4 pt-1 pb-5 [scrollbar-width:none] md:mx-0 md:overflow-visible md:px-0 md:pb-1 [&::-webkit-scrollbar]:hidden"
       aria-label="Trip recommendations"
     >
       {cards.map((card, i) => (

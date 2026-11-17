@@ -8,34 +8,43 @@ One-page card and error-state spec for the Airbnb conversational trip-planner pr
 
 **Content source.** Example values come from the Kyoto Weekend Prototype Content Pack: rows S1 (Stays), E1 (Experiences) and F1 (Food). Together they cost $516 for two against the pack's $600 reference budget. This is the first of three use cases; see "Three use cases" below. The pack has no photo URLs because rights for the real photos are not cleared, so each image slot shows a stock photo from Unsplash for illustration. It does not show the place on the card. Where the spec says "image placeholder", read it as that photo slot; a grey stand-in is drawn if a photo is missing.
 
-**One layout for all three cards.** Stay, Experience and Food use the same card component, so they read as one family. The earlier version of this spec gave each card a different layout (banner, side strip, round thumbnail); that was replaced after review because the cards looked unrelated. What tells the cards apart now is the badge on the photo, its accent colour and the content.
+**What makes the cards look different.** Stay, Experience and Food share one frame (corners, stats row, footer, two actions), so they still read as one plan. Three things differ, as the brief asks:
+
+| | Stay | Experience | Food |
+|---|---|---|---|
+| Image position | Across the top, landscape 4:3 | At the side, portrait 3:4, about 45% of the width | Small square thumbnail, top left |
+| Biggest text | Nightly price, "$168 per night" | Start time, "Sat 10:30 start" | Restaurant name, "Menya Inoichi" |
+| Accent colour | Coral | Violet | Amber |
+
+The accent colour shows as a filled badge with the card type in words ("Stay", "Experience", "Food") and a rule across the top of the card, so colour is never the only cue. An earlier version merged the three into one identical layout to match a reference listing card; that lost the first two differences and was reverted.
 
 ```
-+-----------------------------------------------+
-|  +-----------------------------------------+  |
-|  | ( * Stay )                              |  |  <- badge: icon in accent colour + card type
-|  |                 photo                   |  |
-|  +-----------------------------------------+  |
-|  $168  per night                              |  <- headline: biggest text + small label
-|  Restored machiya townhouse near Gion         |  <- name, then area in grey
-|  • Gion, Kyoto                                |
-|  -------------------------------------------  |
-|   2 Nights          |   4.92 Rating           |  <- two stats
-|  -------------------------------------------  |
-|  Hosted by • Kenji             11 – 13 Apr    |  <- footer: who / when
-|  [   View stay   ]  [   ♡ Save   ]             |  <- two actions
-+-----------------------------------------------+
+ STAY                        EXPERIENCE                  FOOD
+ ======== coral =========    ======== violet ========    ======== amber =========
+ +--------------------+      +--------+ (Experience)     +----+          ( Food )
+ | (Stay)             |      |        |                  |img |
+ |      photo         |      | photo  |                  +----+
+ |                    |      |        |  Sat 10:30       Menya Inoichi    <- biggest
+ +--------------------+      +--------+  start  <- biggest   Ramen • Gion
+ $168 per night  <- biggest  Tea ceremony in a ...
+ Restored machiya ...        • Culture
+ ---------------------       ---------------------       ---------------------
+ 2 Nights | 4.92 Rating      2 Hours | 4.96 Rating       8 min Walk | $ Price
+ Hosted by • Kenji           Hosted by • Mei             Good for • Dinner
+ 11 – 13 Apr 2025            $58 per guest               $34 for two, estimated
+ [View stay] [Save]          [See times] [Add to plan]   [View restaurant] [Add to plan]
 ```
 
 | Slot | Stay | Experience | Food |
 |---|---|---|---|
 | Badge | Stay, coral | Experience, violet | Food, amber |
-| Headline | Nightly price, "per night" | Price per guest, "per guest" | Estimated cost, "for two, estimated" |
-| Name line | Listing title, neighbourhood | Experience title, category | Place name, cuisine and area |
+| Photo | Top | Side | Thumbnail |
+| Biggest text | Nightly price, "per night" | Start time, "start" | Place name |
+| Name line | Listing title, neighbourhood | Experience title, category | Cuisine and area, under the name |
 | Stat 1 | Nights | Duration | Walk from stay |
 | Stat 2 | Guest rating | Rating | Price level |
 | Footer line 1 | Hosted by, host first name | Hosted by, host first name (or "to be confirmed") | Good for, meal |
-| Footer line 2 | Dates | Day and start time | Neighbourhood |
+| Footer line 2 | Dates | Price per guest | Estimated cost for two |
 | Action 1, opens details in the card | View stay | See times | View restaurant |
 | Action 2, adds to the shortlist | Save, then Saved | Add to plan, then In plan | Add to plan, then In plan |
 | Details shown | Property type, highlight, guests, reviews, total | Time, availability, meeting point, total for two | Booking note, opening hours (not in the sample data), cuisine, area, walk |
@@ -49,7 +58,7 @@ The shortlist appears as a **Your plan** bar above the message box, with one chi
 
 Neither action books, holds or reserves anything. Times, availability and totals in the details are labelled as sample data, the restaurant details say opening hours are not in the sample data, and adding a restaurant does not imply a table is available.
 
-**Row layout.** The three cards sit side by side in one row, in the order Stay, Experience, Food, so they can be compared at a glance. From tablet width up all three share the row. On a phone the row scrolls sideways and snaps card by card, with the next card peeking in. The cards are compact: the name line is always two lines tall, so the three cards line up.
+**Row layout.** The three cards sit side by side in one row, in the order Stay, Experience, Food, so they can be compared at a glance. From tablet width up all three share the row. On a phone the row scrolls sideways and snaps card by card, with the next card peeking in. The cards are compact and stretch to the same height, with the buttons pinned to the bottom so they line up.
 
 The Fields tables below list the mock keys for each card. They are a subset; the full shape is in `src/lib/types.ts`.
 

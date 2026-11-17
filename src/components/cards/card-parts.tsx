@@ -9,22 +9,26 @@ import { track } from "@/lib/track";
 import { cn } from "@/lib/utils";
 
 /**
- * The one layout all three cards use, so Stay, Experience and Food read as a
- * family: inset photo with a badge, price headline, name line, two stats, a
- * footer and two actions.
+ * The frame all three cards share, so Stay, Experience and Food still read as
+ * one plan: same corners, stats row, footer and two actions.
  *
- * It is compact on purpose: the three cards sit side by side in one row.
- * Each card type only decides what goes in the slots. The badge icon and its
- * accent colour are what tell the cards apart.
+ * Three things tell the cards apart, as the brief asks:
+ * - where the photo sits (`layout`): on top for the stay, at the side for the
+ *   experience, a small thumbnail for food;
+ * - which text is biggest: the nightly price, the start time, the restaurant name;
+ * - the accent colour: coral, violet, amber, on a filled badge and a top rule.
  */
 
 const accents = {
-  coral: "text-coral",
-  violet: "text-violet-600",
-  amber: "text-amber-500",
+  coral: { badge: "bg-coral text-white", rule: "bg-coral" },
+  violet: { badge: "bg-violet-600 text-white", rule: "bg-violet-600" },
+  amber: { badge: "bg-amber-400 text-ink", rule: "bg-amber-400" },
 } as const;
 
 export type CardAccent = keyof typeof accents;
+
+/** Photo on top (stay), photo at the side (experience), small thumbnail (food). */
+export type CardLayout = "top" | "side" | "thumb";
 
 export type CardStat = { icon: LucideIcon; value: string; label: string };
 
@@ -33,10 +37,14 @@ export type TripCardView = {
   id: string;
   /** "stay" | "experience" | "food": kept on the element for tests and tracking. */
   type: string;
+  layout: CardLayout;
   badge: { label: string; icon: LucideIcon; accent: CardAccent };
   photo: { src: string | null; alt: string; position: string; fallbackIcon: LucideIcon };
-  /** Biggest text on the card, with a small label after it: "$168" + "per night". */
-  headline: { value: string; label: string };
+  /**
+   * Biggest text on the card, with a small label after it: "$168" + "per night",
+   * "Sat 10:30" + "start". Left out when the name itself is the biggest text (food).
+   */
+  headline?: { value: string; label: string };
   /** Name in ink, then a detail in grey: "Menya Inoichi" + "Ramen". */
   title: string;
   subtitle: string;
@@ -64,12 +72,117 @@ function Stat({ icon: Icon, value, label }: CardStat) {
   );
 }
 
+function CardBadge({ badge }: { badge: TripCardView["badge"] }) {
+  const Icon = badge.icon;
+  return (
+    <span
+      data-card-badge
+      className={cn(
+        "inline-flex w-fit items-center gap-1 rounded-full px-2 py-1 text-[11px] leading-none font-semibold shadow-sm",
+        accents[badge.accent].badge,
+      )}
+    >
+      <Icon className="size-3" strokeWidth={2.4} aria-hidden="true" />
+      {badge.label}
+    </span>
+  );
+}
+
+function Headline({ headline }: { headline: NonNullable<TripCardView["headline"]> }) {
+  return (
+    <p className="flex flex-wrap items-baseline gap-x-1.5" data-card-biggest>
+      <span className="text-xl leading-none font-semibold tracking-tight text-ink">{headline.value}</span>
+      <span className="text-xs text-muted-foreground">{headline.label}</span>
+    </p>
+  );
+}
+
+/** Name line: name in ink, detail in grey, always two lines tall so the row lines up. */
+function NameLine({ view }: { view: TripCardView }) {
+  return (
+    <h3
+      className="line-clamp-2 min-h-[2.5rem] text-[13px] leading-5 text-muted-foreground"
+      title={`${view.title}, ${view.subtitle}`}
+    >
+      <span className="font-medium text-ink">{view.title}</span>
+      <span className="mx-1 text-ink" aria-hidden="true">
+        •
+      </span>
+      {view.subtitle}
+    </h3>
+  );
+}
+
+/** Top of the card. This is where the three layouts differ. */
+function CardTop({ view }: { view: TripCardView }) {
+  const photo = (className: string, sizes: string) => (
+    <PhotoPlaceholder
+      className={className}
+      src={view.photo.src}
+      alt={view.photo.alt}
+      position={view.photo.position}
+      sizes={sizes}
+      label="Photo"
+      icon={view.photo.fallbackIcon}
+    />
+  );
+
+  if (view.layout === "side") {
+    // Experience: photo at the side, start time beside it as the biggest text.
+    return (
+      <>
+        <div className="flex gap-3">
+          {photo("aspect-[3/4] w-[44%] shrink-0 rounded-[16px]", "130px")}
+          <div className="flex min-w-0 flex-1 flex-col justify-between py-1 pr-1">
+            <CardBadge badge={view.badge} />
+            {view.headline && <Headline headline={view.headline} />}
+          </div>
+        </div>
+        <div className="px-1.5 pt-3">
+          <NameLine view={view} />
+        </div>
+      </>
+    );
+  }
+
+  if (view.layout === "thumb") {
+    // Food: small thumbnail, restaurant name as the biggest text.
+    return (
+      <div className="px-1.5 pt-1.5">
+        <div className="flex items-start justify-between gap-2">
+          {photo("size-16 shrink-0 rounded-[14px]", "64px")}
+          <CardBadge badge={view.badge} />
+        </div>
+        <h3 className="mt-3 line-clamp-2 text-xl leading-6 font-semibold tracking-tight text-ink" data-card-biggest>
+          {view.title}
+        </h3>
+        <p className="mt-1 truncate text-[13px] text-muted-foreground">{view.subtitle}</p>
+      </div>
+    );
+  }
+
+  // Stay: photo across the top with the badge on it, nightly price as the biggest text.
+  return (
+    <>
+      <div className="relative">
+        {photo("aspect-[4/3] w-full rounded-[16px]", "(min-width: 768px) 280px, 250px")}
+        <span className="absolute top-2 left-2">
+          <CardBadge badge={view.badge} />
+        </span>
+      </div>
+      <div className="space-y-1.5 px-1.5 pt-3">
+        {view.headline && <Headline headline={view.headline} />}
+        <NameLine view={view} />
+      </div>
+    </>
+  );
+}
+
 export function TripCardShell({ view }: { view: TripCardView }) {
   const [open, setOpen] = useState(false);
   const detailsId = useId();
   const plan = usePlan();
   const inPlan = plan.has(view.id);
-  const BadgeIcon = view.badge.icon;
   const AddIcon = inPlan ? Check : view.actions.add.icon;
 
   function toggleDetails() {
@@ -80,45 +193,17 @@ export function TripCardShell({ view }: { view: TripCardView }) {
   return (
     <article
       data-card={view.type}
+      data-layout={view.layout}
       data-in-plan={inPlan}
       className={cn(
-        "rounded-[22px] border bg-card p-2 shadow-[0_14px_30px_-22px_rgb(28_25_23/0.45)] transition-colors",
+        "relative flex h-full flex-col overflow-hidden rounded-[22px] border bg-card p-2 pt-3 shadow-[0_14px_30px_-22px_rgb(28_25_23/0.45)] transition-colors",
         inPlan ? "border-ink/40" : "border-border/70",
       )}
     >
-      <div className="relative">
-        <PhotoPlaceholder
-          className="aspect-[4/3] w-full rounded-[16px]"
-          src={view.photo.src}
-          alt={view.photo.alt}
-          position={view.photo.position}
-          sizes="(min-width: 768px) 280px, 250px"
-          label="Photo"
-          icon={view.photo.fallbackIcon}
-        />
-        <span className="absolute top-2 left-2 flex items-center gap-1 rounded-full bg-white px-2 py-1 text-[11px] font-medium text-ink shadow-sm">
-          <BadgeIcon className={cn("size-3", accents[view.badge.accent])} strokeWidth={2.4} aria-hidden="true" />
-          {view.badge.label}
-        </span>
-      </div>
+      {/* Accent rule across the top: the card's colour, visible even before the photo loads. */}
+      <span aria-hidden="true" className={cn("absolute inset-x-0 top-0 h-1", accents[view.badge.accent].rule)} />
 
-      <div className="px-1.5 pt-3">
-        <p className="flex items-baseline gap-1.5">
-          <span className="text-xl leading-none font-semibold tracking-tight text-ink">{view.headline.value}</span>
-          <span className="truncate text-xs text-muted-foreground">{view.headline.label}</span>
-        </p>
-        {/* Always two lines tall, so the three cards line up whatever the name length. */}
-        <h3
-          className="mt-1.5 line-clamp-2 min-h-[2.5rem] text-[13px] leading-5 text-muted-foreground"
-          title={`${view.title}, ${view.subtitle}`}
-        >
-          <span className="font-medium text-ink">{view.title}</span>
-          <span className="mx-1 text-ink" aria-hidden="true">
-            •
-          </span>
-          {view.subtitle}
-        </h3>
-      </div>
+      <CardTop view={view} />
 
       <div className="mt-2.5 flex items-center divide-x divide-border border-y border-border px-1 py-2.5">
         <Stat {...view.stats[0]} />
@@ -147,7 +232,8 @@ export function TripCardShell({ view }: { view: TripCardView }) {
         </dl>
       )}
 
-      <div className="flex gap-1.5">
+      {/* Pinned to the bottom, so the buttons line up across cards of different heights. */}
+      <div className="mt-auto flex gap-1.5">
         <Button
           type="button"
           onClick={toggleDetails}

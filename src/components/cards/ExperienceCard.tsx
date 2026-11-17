@@ -3,13 +3,17 @@ import { TripCardShell, detailRows } from "@/components/cards/card-parts";
 import { formatDay, formatUsd } from "@/lib/format";
 import type { ExperienceDetails } from "@/lib/types";
 
-/** Experience: price per guest up top, duration and rating as stats, host and start time in the footer. Actions: See times, Add to plan. */
+/**
+ * Experience: photo at the side, start time as the biggest text, violet accent.
+ * Duration and rating as stats, host and price per guest in the footer. Actions: See times, Add to plan.
+ */
 export function ExperienceCard({ details, sourceRow }: { details: ExperienceDetails; sourceRow: string }) {
   return (
     <TripCardShell
       view={{
         id: sourceRow,
         type: "experience",
+        layout: "side",
         badge: { label: "Experience", icon: Ticket, accent: "violet" },
         photo: {
           src: details.imageUrl,
@@ -17,7 +21,7 @@ export function ExperienceCard({ details, sourceRow }: { details: ExperienceDeta
           position: details.imagePosition,
           fallbackIcon: Ticket,
         },
-        headline: { value: formatUsd(details.pricePerGuestUsd), label: "per guest" },
+        headline: { value: `${formatDay(details.date).split(" ")[0]} ${details.startTime}`, label: "start" },
         title: details.activityName,
         subtitle: details.category,
         stats: [
@@ -27,7 +31,7 @@ export function ExperienceCard({ details, sourceRow }: { details: ExperienceDeta
         footer: {
           label: "Hosted by",
           value: details.hostFirstName ?? "to be confirmed",
-          meta: `${formatDay(details.date)}, ${details.startTime}`,
+          meta: `${formatUsd(details.pricePerGuestUsd)} per guest`,
         },
         actions: { view: "See times", add: { label: "Add to plan", doneLabel: "In plan", icon: Plus } },
         details: detailRows([
