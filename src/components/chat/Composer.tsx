@@ -20,14 +20,18 @@ export function Composer({ disabled, onSend }: Props) {
   return (
     <form
       onSubmit={submit}
-      className="flex items-center gap-2 rounded-full border border-border bg-card p-1.5 pl-5 shadow-[0_10px_30px_-12px_rgb(28_25_23/0.25)] transition focus-within:border-ink/40 focus-within:shadow-[0_12px_34px_-12px_rgb(28_25_23/0.35)]"
+      aria-busy={disabled}
+      data-locked={disabled}
+      className="flex items-center gap-2 rounded-full border border-border bg-card p-1.5 pl-5 data-[locked=true]:bg-muted/70 shadow-[0_10px_30px_-12px_rgb(28_25_23/0.25)] transition focus-within:border-ink/40 focus-within:shadow-[0_12px_34px_-12px_rgb(28_25_23/0.35)]"
     >
       <input
         value={text}
         onChange={(e) => setText(e.target.value)}
-        placeholder="Describe your trip…"
+        // Locked while a reply is on its way, so a second request can't be typed or sent.
+        disabled={disabled}
+        placeholder={disabled ? "Putting your plan together…" : "Describe your trip…"}
         aria-label="Message"
-        className="min-w-0 flex-1 bg-transparent text-[15px] text-ink outline-none placeholder:text-muted-foreground/70"
+        className="min-w-0 flex-1 bg-transparent text-[15px] text-ink outline-none placeholder:text-muted-foreground/70 disabled:cursor-not-allowed"
       />
       <Button
         type="submit"

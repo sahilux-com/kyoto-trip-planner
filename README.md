@@ -1,5 +1,10 @@
 # Kyoto Trip Planner
 
+**Live prototype:** <https://kyoto-trip-planner-ecru.vercel.app> ·
+**Code:** <https://github.com/sahilux-com/kyoto-trip-planner>
+
+![The assistant's reply: Stay, Experience and Food cards side by side, with two items saved to the plan](docs/screenshot.jpg)
+
 Prototype of a conversational trip planner for a Kyoto weekend. It answers the
 question "can travellers start exploring before configuring search filters?"
 by letting them describe the trip in one message and getting three
@@ -16,8 +21,15 @@ npm run dev
 ```
 
 Open <http://localhost:3000>, type a message (or tap one of the three starter
-prompts) and press send. A thinking animation plays, then three cards appear in
-the order Stay, Experience, Food.
+prompts) and press send.
+
+1. **The chat locks.** The message box and send button are disabled, so a
+   second request can't be typed or sent while one is in flight.
+2. **A thinking state plays** for 1.6 seconds: animated dots, a status line and
+   outlines of the three cards that are coming.
+3. **The mock reply arrives:** three cards in the order Stay, Experience, Food,
+   built from three rows of the content workbook (one stay row, one experience
+   row, one food row), and the chat unlocks.
 
 ## Three use cases
 
